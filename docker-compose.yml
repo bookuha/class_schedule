@@ -21,6 +21,11 @@ services:
       - DB_PORT=5432
       - DB_USER=postgres
       - DB_PASSWORD=pass
+      - DB_NAME=classschedule
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - MONGO_CURRENT_DB=schedules
+      - MONGO_DEFAULT_SERVER_CLUSTER=mongo
 
   frontend:
     build:
@@ -63,4 +68,7 @@ services:
     environment:
       - MONGO_INITDB_ROOT_USERNAME=root
       - MONGO_INITDB_ROOT_PASSWORD=example
+    networks:
+      - dev
+
       
