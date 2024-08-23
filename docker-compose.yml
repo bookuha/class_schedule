@@ -16,23 +16,13 @@ services:
       - dev
     volumes:
       - ./backup:/backup
-    environment:
-      - DB_HOST=db
-      - DB_PORT=5432
-      - DB_USER=postgres
-      - DB_PASSWORD=pass
-      - DB_NAME=classschedule
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
-      - MONGO_CURRENT_DB=schedules
-      - MONGO_DEFAULT_SERVER_CLUSTER=mongo
+    env_file: "./env/backend.env"
 
   frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    environment:
-      - REACT_APP_API_BASE_URL=http://localhost:8080/
+    env_file: "./env/frontend.env"
     ports:
       - "3000:3000"
     networks:
@@ -41,10 +31,7 @@ services:
   db:
     image: postgres:latest
     restart: always
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=pass
-      - POSTGRES_DB=classschedule
+    env_file: "./env/postgres.env"
     ports:
       - "5433:5432"
     volumes:
@@ -55,6 +42,7 @@ services:
   redis:
     image: redis:7.4.0
     restart: always
+    env_file: "./env/redis.env"
     ports:
       - "6379:6379"
     networks:
@@ -65,10 +53,6 @@ services:
     restart: always
     ports:
       - "27017:27017"
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=root
-      - MONGO_INITDB_ROOT_PASSWORD=example
+    env_file: "./env/mongo.env"
     networks:
       - dev
-
-      
