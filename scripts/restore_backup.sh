@@ -15,8 +15,5 @@ if [ -f "/backup/backup.dump" ]; then
     psql -h $DB_HOST -p $DB_PORT -U $DB_USER -d classschedule -f "/backup/backup.dump"
     echo "Database restored from backup."
 else
-    echo "Backup file not found. Skipping restore."
+    echo "Backup file not found. Restore failed."
 fi
-
-# Start Tomcat
-exec "$@"

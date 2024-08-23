@@ -9,13 +9,12 @@ FROM tomcat:9.0.93-jdk11 as tomcat
 
 RUN apt-get update && apt-get install -y postgresql-client
 
-COPY entrypoint.sh /usr/local/bin/entrypoint.sh
-RUN chmod +x /usr/local/bin/entrypoint.sh
+COPY /scripts/restore_backup.sh /usr/local/bin/restore_backup.sh
+RUN chmod +x /usr/local/bin/restore_backup.sh
 
 WORKDIR /usr/local/tomcat/webapps/
 COPY --from=build /usr/app/build/libs/class_schedule.war ./ROOT.war
 
 EXPOSE 8080
 
-ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 CMD ["catalina.sh", "run"]
