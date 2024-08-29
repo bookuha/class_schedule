@@ -1,0 +1,58 @@
+networks:
+  dev:
+    driver: bridge
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file: "./env/backend.env"
+    ports:
+      - "8080:8080"
+      - "443:443"
+    depends_on:
+      - db
+    networks:
+      - dev
+    volumes:
+      - ./backup:/backup
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    env_file: "./env/frontend.env"
+    ports:
+      - "3000:3000"
+    networks:
+      - dev
+
+  db:
+    image: postgres:latest
+    restart: always
+    env_file: "./env/postgres.env"
+    ports:
+      - "5433:5432"
+    volumes:
+      - ./data:/var/lib/postgresql/data
+    networks:
+      - dev
+
+  redis:
+    image: redis:7.4.0
+    restart: always
+    env_file: "./env/redis.env"
+    ports:
+      - "6379:6379"
+    networks:
+      - dev
+
+  mongo:
+    image: mongo:latest
+    restart: always
+    env_file: "./env/mongo.env"
+    ports:
+      - "27017:27017"
+    networks:
+      - dev
