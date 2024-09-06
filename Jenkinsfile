@@ -14,11 +14,13 @@ pipeline {
             }
         }
         stage('Clean') {
-            try {
-                sh 'docker rmi -f $(docker images -q -f dangling=true)'
-            } 
-            catch(Exception e) {
-                echo 'No dangling images found. '
+            steps {
+                try {
+                    sh 'docker rmi -f $(docker images -q -f dangling=true)'
+                }
+                catch(Exception e) {
+                    echo 'No dangling images found. '
+                }
             }
         }
     }
