@@ -13,15 +13,5 @@ pipeline {
                 sh 'docker push bookuha/class_schedule_backend:neo'
             }
         }
-        stage('Clean') {
-            script {
-                try {
-                    sh 'docker rmi -f $(docker images -q -f dangling=true)'
-                }
-                catch(Exception e) {
-                    echo 'No dangling images found. '
-                }
-            }
-        }
     }
 }
