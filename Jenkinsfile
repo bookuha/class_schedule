@@ -5,8 +5,10 @@ pipeline {
         DOCKERHUB_CREDS = credentials('docker-hub-credentials')
     }
     stages {
-        stage('Backend tests'){
-                echo 'Backend tests are run here'
+        stage('Frontend tests') {
+            steps {
+                echo 'Frontend tests are run here'
+            }
         }
         stage('Create & Push Docker Backend Image') {
             steps {
@@ -16,8 +18,10 @@ pipeline {
                 sh 'docker push bookuha/class_schedule_backend:neo'
             }
         }
-        stage('Backend tests'){
+        stage('Backend tests') {
+            steps {
                 echo 'Backend tests are run here'
+            }
         }
         stage('Create & Push Frontend Docker Image') {
             steps {
@@ -27,6 +31,5 @@ pipeline {
                 sh 'docker push bookuha/class_schedule_frontend:neo'
             }
         }
-
     }
 }
