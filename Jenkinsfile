@@ -14,7 +14,7 @@ pipeline {
             }
         }
         stage('Clean') {
-            steps {
+            script {
                 try {
                     sh 'docker rmi -f $(docker images -q -f dangling=true)'
                 }
