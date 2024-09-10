@@ -5,10 +5,9 @@ terraform {
       version = "~> 5.0"
     }
   }
+}
 
-  backend "s3" {
-    bucket = "class-schedule-tf-state"
-    key    = "state"
-    region = "eu-central-1"
-  }
+provider "aws" {
+    region = "eu-north-1"
+    shared_credentials_files = ["aws_credentials"]
 }
