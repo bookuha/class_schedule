@@ -5,9 +5,9 @@ pipeline {
         DOCKERHUB_CREDS = credentials('docker-hub-credentials')
     }
     stages {
-        stage('Frontend tests') {
+        stage('Backend tests') {
             steps {
-                echo 'Frontend tests are run here'
+                echo 'Backend tests are run here'
             }
         }
         stage('Create & Push Docker Backend Image') {
@@ -18,9 +18,9 @@ pipeline {
                 sh 'docker push bookuha/class_schedule_backend:neo'
             }
         }
-        stage('Backend tests') {
+        stage('Frontend tests') {
             steps {
-                echo 'Backend tests are run here'
+                echo 'Frontend tests are run here'
             }
         }
         stage('Create & Push Frontend Docker Image') {
@@ -29,6 +29,15 @@ pipeline {
                 sh 'docker tag class_schedule_frontend:neo bookuha/class_schedule_frontend:neo'
                 sh 'docker login --username=$DOCKERHUB_CREDS_USR --password=$DOCKERHUB_CREDS_PSW docker.io'
                 sh 'docker push bookuha/class_schedule_frontend:neo'
+            }
+        }
+        stage('Create infrastructure') {
+            steps {
+                dir('terraform/aws') {
+                    sh 'terraform init'
+                    sh 'terraform apply --auto-approve'
+
+                }
             }
         }
     }
