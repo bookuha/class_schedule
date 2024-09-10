@@ -9,5 +9,6 @@ terraform {
 
 provider "aws" {
     region = "eu-north-1"
-    shared_credentials_files = ["aws_credentials"]
+    access_key = var.aws_access_key_id
+    secret_key = var.aws_secret_access_key
 }

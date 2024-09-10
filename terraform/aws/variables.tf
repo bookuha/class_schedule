@@ -15,3 +15,13 @@ variable "name_tag" {
   description = "Name of the EC2 instance"
   default     = "Class Schedule"
 }  
+
+variable "aws_access_key_id" {
+  type        = string
+  description = "AWS Access Key Id"
+}
+
+variable "aws_secret_access_key" {
+  type        = string
+  description = "AWS Secret Access Key"
+}
