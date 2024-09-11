@@ -6,3 +6,12 @@
 /src/test/resources/hibernatetest.properties
 /schedule_logs
 /env
+
+# Ignore .terraform directory in terraform/aws
+terraform/aws/.terraform/
+
+# Ignore .tfstate, .hcl, .tfstate.backup, and .tfvars files in terraform/aws
+terraform/aws/*.tfstate
+terraform/aws/*.hcl
+terraform/aws/*.tfstate.backup
+terraform/aws/*.tfvars
