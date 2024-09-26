@@ -23,9 +23,18 @@ resource "docker_container" "backend" {
         "MONGO_CURRENT_DB=${var.mongo_database}",
         "MONGO_DEFAULT_SERVER_CLUSTER=${var.mongo_default_server_cluster}"
     ]
+    volumes {
+        host_path      = "C:\\repos\\class_schedule\\backup"
+        container_path = "/backup"       
+    }
     depends_on = [
         docker_container.postgres,
         docker_container.redis,
         docker_container.mongo
     ]
+=
+    provisioner "local-exec" {
+        # Makes file LF only and restores DB from backup.
+        command = "docker exec ${docker_container.backend.name} /usr/local/bin/restore_backup.sh"
+    }
 }
