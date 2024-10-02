@@ -4,10 +4,8 @@ package_upgrade: true
 
 packages:
   - java-11-amazon-corretto-headless
-  - wget
-  - unzip
   - git
-  - postgresql-client
+  # - postgresql15
 
 runcmd:
   # Install Tomcat 9
@@ -16,6 +14,8 @@ runcmd:
   - ln -s /opt/apache-tomcat-9.0.93 /opt/tomcat
   - chmod +x /opt/tomcat/bin/catalina.sh
   - mkdir -p /opt/tomcat/webapps
+
+  - aws configure set region eu-north-1
 
   # Set environment variables for DB, Redis, and MongoDB
   - echo 'export DB_HOST=${db_host}' >> /etc/environment
@@ -29,10 +29,13 @@ runcmd:
   - echo 'export MONGO_DEFAULT_SERVER_CLUSTER=${mongo_default_server_cluster}' >> /etc/environment
   - source /etc/environment
 
-  - wget --user={artifactory_username} --password={artifactory_password} "https://artifactory.bookuha.com/artifactory/libs-release-local/class_schedule.war" -O /var/lib/tomcat/webapps/ROOT.war
+  - rm -rf opt/tomcat/webapps/ROOT # Removes the starting web app
+  - aws codeartifact get-package-version-asset --domain class-schedule --repository class_schedule --region eu-north-1 --package 1 --package-version 1 --asset 1-1.war --format maven --namespace com.class_schedule opt/tomcat/webapps/ROOT.war
 
-  # Install restore_backup.sh script
-  - cp /usr/app/scripts/restore_backup.sh /usr/local/bin/restore_backup.sh
+
+  # - sudo dnf install postgresql15
+  # Install restore_backup.sh script. TODO: Have to fetch it from Git
+  - wget -O /usr/local/bin/restore_backup.sh https://raw.githubusercontent.com/bookuha/class_schedule/main/scripts/restore_backup.sh
   - chmod +x /usr/local/bin/restore_backup.sh
 
   # Start Tomcat

@@ -1,5 +1,5 @@
 resource "aws_security_group" "app_sg" {
-  name        = "app_sg"
+  name        = "cs_app_sg"
   description = "Allow inbound traffic for app servers"
 
   ingress {
@@ -12,6 +12,13 @@ resource "aws_security_group" "app_sg" {
   ingress {
     from_port   = 80
     to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 8080
+    to_port     = 8080
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
