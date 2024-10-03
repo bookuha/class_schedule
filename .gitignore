@@ -15,3 +15,6 @@ terraform/aws/*.tfstate
 terraform/aws/*.hcl
 terraform/aws/*.tfstate.backup
 terraform/aws/*.tfvars
+
+# Ignore .npmrc
+frontend/.npmrc
