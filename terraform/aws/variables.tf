@@ -14,30 +14,30 @@ variable "frontend_name_tag" {
   type        = string
   description = "Name of the EC2 Frontend Instance"
   default     = "cs_fe"
-}  
+}
 
 variable "backend_name_tag" {
   type        = string
   description = "Name of the EC2 Backend Instance"
   default     = "cs_be"
-} 
+}
 
 variable "mongo_name_tag" {
   type        = string
   description = "Name of the EC2 Mongo Instance"
   default     = "cs_mongo"
-} 
+}
 
 variable "redis_node_type" {
-  type = string
+  type        = string
   description = "Redis Node Type"
-  default = "cache.t3.micro"
+  default     = "cache.t3.micro"
 }
 
 variable "postgres_instance_class" {
-  type = string
+  type        = string
   description = "Postgres Instance Class"
-  default = "db.t3.micro"
+  default     = "db.t3.micro"
 }
 
 variable "postgres_name" {
