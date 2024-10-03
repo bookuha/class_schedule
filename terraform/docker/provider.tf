@@ -11,6 +11,6 @@ provider "docker" {
   host = "npipe:////.//pipe//docker_engine"
 
   registry_auth {
-    address     = "registry-1.docker.io"
+    address = "registry-1.docker.io"
   }
 }

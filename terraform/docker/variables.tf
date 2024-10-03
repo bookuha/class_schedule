@@ -10,8 +10,8 @@ variable "redis_port" {}
 variable "redis_external_port" {}
 variable "frontend_api_url" {}
 variable "backend_image" {
-    default = "bookuha/class_schedule_backend:neo"
+  default = "bookuha/class_schedule_backend:neo"
 }
 variable "frontend_image" {
-    default = "bookuha/class_schedule_frontend:neo"
+  default = "bookuha/class_schedule_frontend:neo"
 }
