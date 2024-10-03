@@ -10,8 +10,12 @@
 # Ignore .terraform directories in all subfolders of terraform
 terraform/**/.terraform/
 
+
 # Ignore .tfstate, .hcl, .tfstate.backup, and .tfvars files in all subfolders of terraform
 terraform/**/*.tfstate
 terraform/**/*.hcl
 terraform/**/*.tfstate.backup
 terraform/**/*.tfvars
+
+# Ignore .npmrc
+frontend/.npmrc
