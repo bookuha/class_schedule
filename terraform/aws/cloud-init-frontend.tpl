@@ -3,7 +3,6 @@ package_update: true
 package_upgrade: true
 
 packages:
-  - curl
   - git
 
 # Install Node.js 18.x
@@ -11,10 +10,17 @@ runcmd:
   - curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
   - sudo yum install -y nodejs
 
-  - wget --user={artifactory_username} --password={artifactory_password} "https://artifactory.bookuha.com/artifactory/libs-release-local/node-app.tar.gz" -O /home/ec2-user/node-app.tar.gz
-  - cd /home/ec2-user
-  - tar -xzf node-app.tar.gz
-  - cd node-app
+  - aws codeartifact get-package-version-asset --domain ${codeartifact_domain} --repository ${codeartifact_repository} --region ${codeartifact_region} --package class_schedule_frontend --package-version 0.1.0 --asset package.tgz --format npm /home/ec2-user/frontend-app.tgz
+
+  # Create a directory for the application
+  - mkdir -p /opt/app
+  - cd /opt/app
+
+  # Extract the downloaded package
+  - tar -xzf /home/ec2-user/frontend-app.tgz
+
+  # Navigate into the package directory and install dependencies
+  - cd package
   - npm install
   - npm run build
 
@@ -23,4 +29,4 @@ runcmd:
   - source /etc/environment
 
   # Run the app
-  - cd /opt/app && npm start
+  - npm start

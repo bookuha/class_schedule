@@ -13,7 +13,10 @@ resource "aws_instance" "backend_instance" {
     redis_host = "${aws_elasticache_cluster.redis.cache_nodes[0].address}",
     redis_port = "${aws_elasticache_cluster.redis.port}",
     mongo_current_db = "${var.mongo_current_db}",
-    mongo_default_server_cluster = "${aws_instance.mongo_instance.public_ip}"
+    mongo_default_server_cluster = "${aws_instance.mongo_instance.public_ip}",
+    codeartifact_domain = "${var.codeartifact_domain}",
+    codeartifact_repository = "${var.codeartifact_repository}",
+    codeartifact_region = "${var.codeartifact_region}"
     },
   )
 
@@ -26,6 +29,11 @@ resource "aws_instance" "backend_instance" {
     aws_elasticache_cluster.redis,
     aws_instance.mongo_instance
   ]
+}
+
+resource "aws_iam_instance_profile" "be_instance_profile" {
+  name = "BackendInstanceProfile"
+  role = aws_iam_role.codeartifact_role.name
 }
 
 resource "aws_security_group" "be_sg" {
@@ -54,60 +62,3 @@ resource "aws_security_group_rule" "be_to_redis"{
   source_security_group_id = aws_security_group.redis_sg.id
 }
 
-resource "aws_iam_role" "be_codeartifact_role" {
-  name = "BackendCodeArtifactRole"
-
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17",
-    Statement = [
-      {
-        Action    = "sts:AssumeRole",
-        Effect    = "Allow",
-        Principal = {
-          Service = "ec2.amazonaws.com"
-        }
-      }
-    ]
-  })
-}
-
-resource "aws_iam_policy" "codeartifact_policy" {
-  name        = "CodeArtifactAccessPolicy"
-  description = "Policy to allow EC2 to fetch artifacts from AWS CodeArtifact"
-  policy      = jsonencode(
-{
-   "Version": "2012-10-17",
-   "Statement": [
-      {
-         "Action": [
-            "codeartifact:Describe*",
-            "codeartifact:Get*",
-            "codeartifact:List*",
-            "codeartifact:ReadFromRepository"
-         ],
-         "Effect": "Allow",
-         "Resource": "*"
-      },
-      {
-         "Effect": "Allow",
-         "Action": "sts:GetServiceBearerToken",
-         "Resource": "*",
-         "Condition": {
-            "StringEquals": {
-               "sts:AWSServiceName": "codeartifact.amazonaws.com"
-            }
-         }
-      }  
-   ]
-})
-}
-
-resource "aws_iam_role_policy_attachment" "attach_codeartifact_policy" {
-  role       = aws_iam_role.be_codeartifact_role.name
-  policy_arn = aws_iam_policy.codeartifact_policy.arn
-}
-
-resource "aws_iam_instance_profile" "be_instance_profile" {
-  name = "BackendInstanceProfile"
-  role = aws_iam_role.be_codeartifact_role.name
-}
