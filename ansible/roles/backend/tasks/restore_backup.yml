@@ -1,0 +1,24 @@
+- name: Create /backup directory if not exists
+  file:
+    path: /backup
+    state: directory
+    mode: "0755"
+  become: yes
+
+- name: Download restore_backup.sh script
+  get_url:
+    url: https://raw.githubusercontent.com/bookuha/class_schedule/main/scripts/restore_backup.sh
+    dest: /usr/local/bin/restore_backup.sh
+    mode: "0755"
+  become: yes
+
+- name: Download backup.dump file
+  get_url:
+    url: https://raw.githubusercontent.com/bookuha/class_schedule/refs/heads/main/backup/backup.dump
+    dest: /backup/backup.dump
+    mode: "0644"
+  become: yes
+
+- name: Run restore_backup.sh script to restore the database
+  command: /usr/local/bin/restore_backup.sh
+  become: yes

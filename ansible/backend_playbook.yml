@@ -1,0 +1,6 @@
+# backend_playbook.yml
+
+- hosts: backend
+  become: yes
+  roles:
+    - backend

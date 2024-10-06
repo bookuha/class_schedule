@@ -1,0 +1,4 @@
+- name: Ensure Java is installed
+  yum:
+    name: java-11-amazon-corretto
+    state: present

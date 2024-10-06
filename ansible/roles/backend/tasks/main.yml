@@ -1,0 +1,5 @@
+- import_tasks: install_java.yml
+- import_tasks: install_tomcat.yml
+- import_tasks: fetch_war.yml
+# - import_tasks: run_backup.yml - Is ommited for now since it requires parametrization
+- import_tasks: start_tomcat.yml
