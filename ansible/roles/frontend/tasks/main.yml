@@ -1,0 +1,3 @@
+- import_tasks: install_node.yml
+- import_tasks: fetch_package.yml
+- import_tasks: start_node.yml

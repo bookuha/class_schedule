@@ -1,0 +1,6 @@
+# frontend_playbook.yml
+
+- hosts: frontend
+  become: yes
+  roles:
+    - frontend
