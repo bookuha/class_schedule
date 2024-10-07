@@ -5,7 +5,7 @@ pipeline {
         DOCKERHUB_CREDS = credentials('docker-hub-credentials')
         AWS_CODEARTIFACT_DOMAIN = credentials('aws-codeartifact-domain')
         AWS_ACCOUNT_ID = credentials('aws-account-id')
-        AWS_REGION = credentials('eu-north-1')
+        AWS_REGION = credentials('aws-region')
         AWS_CODEARTIFACT_REPO = credentials('aws-codeartifact-repo')
     }
 
