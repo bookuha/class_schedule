@@ -75,18 +75,3 @@ variable "aws_secret_access_key" {
   description = "AWS Secret Access Key"
   sensitive   = true
 }
-
-variable "codeartifact_domain" {
-  type        = string
-  description = "AWS CodeArtifact Domain"
-}
-
-variable "codeartifact_repository" {
-  type        = string
-  description = "AWS CodeArtifact Resository"
-}
-
-variable "codeartifact_region" {
-  type        = string
-  description = "AWS CodeArtifact Region"
-}

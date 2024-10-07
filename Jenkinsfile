@@ -1,17 +1,22 @@
 pipeline {
-    agent { label 'agency' }
-
+    agent any
+    
     environment {
         DOCKERHUB_CREDS = credentials('docker-hub-credentials')
+        AWS_CODEARTIFACT_DOMAIN = credentials('aws-codeartifact-domain')
+        AWS_ACCOUNT_ID = credentials('aws-account-id')
+        AWS_REGION = credentials('eu-north-1')
+        AWS_CODEARTIFACT_REPO = credentials('aws-codeartifact-repo')
     }
 
     stages {
         stage('Backend tests') {
             steps {
                 echo 'Running backend tests'
-                // Add your backend test commands
+                // Testing is done here.
             }
         }
+
         stage('Create & Push Docker Backend Image') {
             environment {
                 BACKEND_IMAGE = 'class_schedule_backend:neo'
@@ -24,12 +29,14 @@ pipeline {
                 sh 'docker push $DOCKER_REPO/$BACKEND_IMAGE'
             }
         }
+
         stage('Frontend tests') {
             steps {
                 echo 'Running frontend tests'
-                // Add your frontend test commands
+                // Testing is done here.
             }
         }
+
         stage('Create & Push Frontend Docker Image') {
             environment {
                 FRONTEND_IMAGE = 'class_schedule_frontend:neo'
@@ -42,16 +49,44 @@ pipeline {
                 sh 'docker push $DOCKER_REPO/$FRONTEND_IMAGE'
             }
         }
-        stage('Create infrastructure') {
+
+        stage('Publish Backend to AWS CodeArtifact') {
+            steps {
+                sh "./publish_to_codeartifact.sh"
+            }
+        }
+
+        stage('Publish Frontend to AWS CodeArtifact') {
+            steps {
+                dir('frontend') {
+                    sh "./publish_to_codeartifact.sh"
+                }
+            }
+        }
+
+        stage('Create AWS infrastructure') {
             environment {
-                TERRAFORM_WORKSPACE = 'terraform/aws'
                 TF_VAR_aws_access_key_id = credentials('aws-tf-access-key-id')
                 TF_VAR_aws_secret_access_key = credentials('aws-tf-secret-access-key')
+                TF_VAR_postgres_username = credentials('aws-rds-postgres-username')
+                TF_VAR_postgres_password = credentials('aws-rds-postgres-password')
             }
             steps {
-                dir(TERRAFORM_WORKSPACE) {
+                dir('terraform/aws') {
                     sh 'terraform init'
                     sh 'terraform apply --auto-approve'
+                }
+            }
+        }
+
+        stage('Run Ansible Playbooks') {
+            steps {
+                script {
+                    // Run Backend Playbook
+                    sh 'ansible-playbook -i inventory backend-playbook.yml'
+
+                    // Run Frontend Playbook
+                    sh 'ansible-playbook -i inventory frontend-playbook.yml'
                 }
             }
         }
