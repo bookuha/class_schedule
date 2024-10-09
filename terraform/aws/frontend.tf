@@ -3,7 +3,7 @@ resource "aws_instance" "frontend_instance" {
   instance_type        = var.instance_type
   security_groups      = [aws_security_group.app_sg.name]
   iam_instance_profile = aws_iam_instance_profile.fe_instance_profile.name
-  key_name             = aws_key_pair.key_name
+  key_name             = aws_key_pair.ssh-key.key_name
 
   tags = {
     Name = var.frontend_name_tag
