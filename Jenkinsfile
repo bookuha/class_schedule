@@ -91,9 +91,9 @@ pipeline {
         stage('Build Frontend Locally') {
             steps {
                 dir('frontend') {
-                    // Switch back to default registry to get packages
-                    sh 'npm config set registry https://registry.npmjs.org/' 
-                    sh 'npm cache clean --force'
+                    // Default registry for NPM packages. Required, since .npmrc has our CodeArtifact registry specified as the only one.
+                    sh 'sh echo "registry=https://registry.npmjs.org/" >> .npmrc'
+
                     
                     sh 'npm install'
                     sh 'npm run build'
