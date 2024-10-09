@@ -52,6 +52,7 @@ pipeline {
 
         stage('Publish Backend to AWS CodeArtifact') {
             steps {
+                sh 'chmod +x publish_to_codeartifact.sh'
                 sh "./publish_to_codeartifact.sh"
             }
         }
@@ -59,6 +60,7 @@ pipeline {
         stage('Publish Frontend to AWS CodeArtifact') {
             steps {
                 dir('frontend') {
+                    sh 'chmod +x publish_to_codeartifact.sh'
                     sh "./publish_to_codeartifact.sh"
                 }
             }
