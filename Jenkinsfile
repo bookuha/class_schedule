@@ -91,6 +91,10 @@ pipeline {
         stage('Build Frontend Locally') {
             steps {
                 dir('frontend') {
+                    // Switch back to default registry to get packages
+                    sh 'npm config set registry https://registry.npmjs.org/' 
+                    sh 'npm cache clean --force'
+                    
                     sh 'npm install'
                     sh 'npm run build'
                 }
