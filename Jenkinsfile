@@ -91,6 +91,7 @@ pipeline {
         stage('Run Ansible Playbooks') {
             environment {
                 ANSIBLE_HOST_KEY_CHECKING='False'
+                DB_PASS = credentials('aws-rds-postgres-password')
             }
             steps {
                 script {
@@ -98,7 +99,7 @@ pipeline {
                         // Run Backend Playbook
                         sh """
                             ansible-playbook -i ${BACKEND_IP}, backend_playbook.yml \
-                            --extra-vars "db_host=${POSTGRES_IP} redis_host=${REDIS_IP} mongo_current_db=${MONGO_IP}" \
+                            --extra-vars "db_host=${POSTGRES_IP} db_password=${DB_PASS} redis_host=${REDIS_IP} mongo_current_db=${MONGO_IP}" \
                             -u ec2-user \
                             --private-key ~/.ssh/id_rsa
                         """
