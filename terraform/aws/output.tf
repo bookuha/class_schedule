@@ -16,4 +16,14 @@ output "mongo_instance_public_ip" {
   value       = aws_instance.mongo_instance.public_ip
 }
 
-# TODO: Add Postgres & Redis outputs.
+# Output for Postgres instance public IP
+output "postgres_instance_public_ip" {
+  description = "Public IP address of the RDS instance"
+  value       = aws_db_instance.postgres.address
+}
+
+# Output for Redis instance public IP
+output "redis_instance_public_ip" {
+  description = "Public IP address of the ElastiCache Redis instance"
+  value       = aws_elasticache_cluster.redis.cache_nodes[0].address
+}

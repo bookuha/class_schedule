@@ -75,6 +75,11 @@ pipeline {
                 dir('terraform/aws') {
                     sh 'terraform init'
                     sh 'terraform apply --auto-approve'
+                    env.FRONTEND_IP = sh(script: 'terraform output -raw frontend_instance_public_ip', returnStdout: true).trim()
+                    env.BACKEND_IP = sh(script: 'terraform output -raw backend_instance_public_ip', returnStdout: true).trim()
+                    env.MONGO_IP = sh(script: 'terraform output -raw mongo_instance_public_ip', returnStdout: true).trim()
+                    env.POSTGRES_IP = sh(script: 'terraform output -raw postgres_instance_public_ip', returnStdout: true).trim()
+                    env.REDIS_IP = sh(script: 'terraform output -raw redis_instance_public_ip', returnStdout: true).trim()
                 }
             }
         }
@@ -83,10 +88,16 @@ pipeline {
             steps {
                 script {
                     // Run Backend Playbook
-                    sh 'ansible-playbook -i inventory backend-playbook.yml'
+                    sh """
+                        ansible-playbook -i inventory.ini backend-playbook.yml \
+                        --extra-vars "db_host=${POSTGRES_IP} redis_host=${REDIS_IP} mongo_current_db=${MONGO_IP}"
+                    """
 
                     // Run Frontend Playbook
-                    sh 'ansible-playbook -i inventory frontend-playbook.yml'
+                    sh """
+                        ansible-playbook -i inventory.ini frontend-playbook.yml \
+                        --extra-vars "api_ip=${BACKEND_IP}"
+                    """
                 }
             }
         }
