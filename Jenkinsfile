@@ -75,11 +75,13 @@ pipeline {
                 dir('terraform/aws') {
                     sh 'terraform init'
                     sh 'terraform apply --auto-approve'
-                    env.FRONTEND_IP = sh(script: 'terraform output -raw frontend_instance_public_ip', returnStdout: true).trim()
-                    env.BACKEND_IP = sh(script: 'terraform output -raw backend_instance_public_ip', returnStdout: true).trim()
-                    env.MONGO_IP = sh(script: 'terraform output -raw mongo_instance_public_ip', returnStdout: true).trim()
-                    env.POSTGRES_IP = sh(script: 'terraform output -raw postgres_instance_public_ip', returnStdout: true).trim()
-                    env.REDIS_IP = sh(script: 'terraform output -raw redis_instance_public_ip', returnStdout: true).trim()
+                    script {
+                        env.FRONTEND_IP = sh(script: 'terraform output -raw frontend_instance_public_ip', returnStdout: true).trim()
+                        env.BACKEND_IP = sh(script: 'terraform output -raw backend_instance_public_ip', returnStdout: true).trim()
+                        env.MONGO_IP = sh(script: 'terraform output -raw mongo_instance_public_ip', returnStdout: true).trim()
+                        env.POSTGRES_IP = sh(script: 'terraform output -raw postgres_instance_public_ip', returnStdout: true).trim()
+                        env.REDIS_IP = sh(script: 'terraform output -raw redis_instance_public_ip', returnStdout: true).trim()
+                    }
                 }
             }
         }
