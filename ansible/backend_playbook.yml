@@ -1,6 +1,6 @@
 # backend_playbook.yml
 
-- hosts: backend
+- hosts: all # Change to your group, if you're using inventory file
   become: yes
   roles:
     - backend

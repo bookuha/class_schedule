@@ -3,6 +3,7 @@ resource "aws_instance" "backend_instance" {
   instance_type        = var.instance_type
   security_groups      = [aws_security_group.app_sg.name, aws_security_group.be_sg.name]
   iam_instance_profile = aws_iam_instance_profile.be_instance_profile.name
+  key_name             = aws_key_pair.key_name
 
   tags = {
     Name = var.backend_name_tag

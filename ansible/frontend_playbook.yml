@@ -1,6 +1,6 @@
 # frontend_playbook.yml
 
-- hosts: frontend
+- hosts: all # Change to your group, if you're using inventory file
   become: yes
   roles:
     - frontend

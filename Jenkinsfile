@@ -91,17 +91,19 @@ pipeline {
         stage('Run Ansible Playbooks') {
             steps {
                 script {
-                    // Run Backend Playbook
-                    sh """
-                        ansible-playbook -i inventory.ini backend-playbook.yml \
-                        --extra-vars "db_host=${POSTGRES_IP} redis_host=${REDIS_IP} mongo_current_db=${MONGO_IP}"
-                    """
+                    dir('ansible') {
+                        // Run Backend Playbook
+                        sh """
+                            ansible-playbook -i inventory.ini backend_playbook.yml \
+                            --extra-vars "db_host=${POSTGRES_IP} redis_host=${REDIS_IP} mongo_current_db=${MONGO_IP}"
+                        """
 
-                    // Run Frontend Playbook
-                    sh """
-                        ansible-playbook -i inventory.ini frontend-playbook.yml \
-                        --extra-vars "api_ip=${BACKEND_IP}"
-                    """
+                        // Run Frontend Playbook
+                        sh """
+                            ansible-playbook -i inventory.ini frontend_playbook.yml \
+                            --extra-vars "api_ip=${BACKEND_IP}"
+                        """
+                    }
                 }
             }
         }
