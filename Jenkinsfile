@@ -88,6 +88,15 @@ pipeline {
             }
         }
 
+        stage('Build Frontend Locally') {
+            steps {
+                dir('frontend') {
+                    sh 'npm install'
+                    sh 'npm run build'
+                }
+            }
+        }
+
         stage('Run Ansible Playbooks') {
             environment {
                 ANSIBLE_HOST_KEY_CHECKING='False'
@@ -107,7 +116,7 @@ pipeline {
                         // Run Frontend Playbook
                         sh """
                             ansible-playbook -i ${FRONTEND_IP}, frontend_playbook.yml \
-                            --extra-vars "api_ip=${BACKEND_IP}" \
+                            --extra-vars "api_ip=${BACKEND_IP} workspace_path=${WORKSPACE}" \
                             -u ec2-user \
                             --private-key ~/.ssh/id_rsa
                         """

@@ -1,7 +1,0 @@
-- name: Add NodeSource repository
-  shell: "curl -fsSL https://rpm.nodesource.com/setup_18.x | bash -"
-- name: Install Node.js
-  package:
-    name: nodejs
-    state: present
-  when: ansible_os_family == 'RedHat'
