@@ -94,13 +94,13 @@ pipeline {
                     dir('ansible') {
                         // Run Backend Playbook
                         sh """
-                            ansible-playbook -i inventory.ini backend_playbook.yml \
+                            ansible-playbook -i ${BACKEND_IP}, backend_playbook.yml \
                             --extra-vars "db_host=${POSTGRES_IP} redis_host=${REDIS_IP} mongo_current_db=${MONGO_IP}"
                         """
 
                         // Run Frontend Playbook
                         sh """
-                            ansible-playbook -i inventory.ini frontend_playbook.yml \
+                            ansible-playbook -i ${FRONTEND_IP}, frontend_playbook.yml \
                             --extra-vars "api_ip=${BACKEND_IP}"
                         """
                     }
