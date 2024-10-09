@@ -89,6 +89,9 @@ pipeline {
         }
 
         stage('Run Ansible Playbooks') {
+            environment {
+                ANSIBLE_HOST_KEY_CHECKING='False'
+            }
             steps {
                 script {
                     dir('ansible') {
