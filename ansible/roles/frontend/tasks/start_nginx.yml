@@ -19,7 +19,7 @@
 
 - name: Copy built React app to server
   copy:
-    src: "{{ workspace }}/frontend/build/"
+    src: "{{ workspace_path }}/frontend/build/"
     dest: /var/www/react_app/
     owner: nginx
     group: nginx
