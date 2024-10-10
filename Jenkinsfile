@@ -89,6 +89,9 @@ pipeline {
         }
 
         stage('Build Frontend Locally') {
+            environment {
+                REACT_APP_API_BASE_URL="http://${env.BACKEND_IP}:8080"
+            }
             steps {
                 dir('frontend') {
                     // Default registry for NPM packages. Required, since .npmrc has our CodeArtifact registry specified as the only one.
