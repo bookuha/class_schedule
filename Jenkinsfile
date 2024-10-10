@@ -92,10 +92,7 @@ pipeline {
             steps {
                 dir('frontend') {
                     // Default registry for NPM packages. Required, since .npmrc has our CodeArtifact registry specified as the only one.
-                    // https://github.com/npm/cli/issues/2567#issuecomment-772085171
-                    sh 'echo "//registry.npmjs.org/:_authToken=dummy" >> .npmrc'
-                    
-                    sh 'npm install'
+                    sh 'npm install --registry=https://registry.npmjs.org'
                     sh 'npm run build'
                 }
             }
