@@ -2,53 +2,11 @@ pipeline {
     agent any
     
     environment {
-        DOCKERHUB_CREDS = credentials('docker-hub-credentials')
         AWS_CODEARTIFACT_DOMAIN = credentials('aws-codeartifact-domain')
         AWS_ACCOUNT_ID = credentials('aws-account-id')
         AWS_REGION = credentials('aws-region')
         AWS_CODEARTIFACT_REPO = credentials('aws-codeartifact-repo')
     }
-
-    stages {
-        stage('Backend tests') {
-            steps {
-                echo 'Running backend tests'
-                // Testing is done here.
-            }
-        }
-
-        stage('Create & Push Docker Backend Image') {
-            environment {
-                BACKEND_IMAGE = 'class_schedule_backend:neo'
-                DOCKER_REPO = 'bookuha'
-            }
-            steps {
-                sh 'docker build -t $BACKEND_IMAGE -f ${WORKSPACE}/Dockerfile .'
-                sh 'docker tag $BACKEND_IMAGE $DOCKER_REPO/$BACKEND_IMAGE'
-                sh 'docker login --username=$DOCKERHUB_CREDS_USR --password=$DOCKERHUB_CREDS_PSW docker.io'
-                sh 'docker push $DOCKER_REPO/$BACKEND_IMAGE'
-            }
-        }
-
-        stage('Frontend tests') {
-            steps {
-                echo 'Running frontend tests'
-                // Testing is done here.
-            }
-        }
-
-        stage('Create & Push Frontend Docker Image') {
-            environment {
-                FRONTEND_IMAGE = 'class_schedule_frontend:neo'
-                DOCKER_REPO = 'bookuha'
-            }
-            steps {
-                sh 'docker build -t $FRONTEND_IMAGE -f $WORKSPACE/frontend/Dockerfile $WORKSPACE/frontend'
-                sh 'docker tag $FRONTEND_IMAGE $DOCKER_REPO/$FRONTEND_IMAGE'
-                sh 'docker login --username=$DOCKERHUB_CREDS_USR --password=$DOCKERHUB_CREDS_PSW docker.io'
-                sh 'docker push $DOCKER_REPO/$FRONTEND_IMAGE'
-            }
-        }
 
         stage('Publish Backend to AWS CodeArtifact') {
             steps {
