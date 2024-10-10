@@ -6,37 +6,31 @@
 
 - name: Remove default Nginx configuration
   file:
-    path: /etc/nginx/sites-enabled/default
+    path: /etc/nginx/conf.d/default.conf
     state: absent
 
 - name: Upload custom Nginx configuration for React app
   copy:
     src: nginx-react.conf
-    dest: /etc/nginx/sites-available/react_app
+    dest: /etc/nginx/conf.d/react_app.conf
     owner: root
     group: root
     mode: "0644"
 
-- name: Create symlink for Nginx config in sites-enabled
-  file:
-    src: /etc/nginx/sites-available/react_app
-    dest: /etc/nginx/sites-enabled/react_app
-    state: link
-
 - name: Copy built React app to server
   copy:
-    src: "{{ workspace }}/frontend/build/" # Adjust this to the correct path to your built files
-    dest: /var/www/react_app/ # This is where the app will be served from
-    owner: www-data
-    group: www-data
+    src: "{{ workspace }}/frontend/build/"
+    dest: /var/www/react_app/
+    owner: nginx
+    group: nginx
     mode: "0755"
-    recurse: yes # Ensure it copies directories and their contents
+    recurse: yes
 
 - name: Set correct permissions for the app directory
   file:
     path: /var/www/react_app/
-    owner: www-data
-    group: www-data
+    owner: nginx
+    group: nginx
     mode: "0755"
     recurse: yes
 
