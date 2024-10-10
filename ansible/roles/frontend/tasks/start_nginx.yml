@@ -24,7 +24,6 @@
     owner: nginx
     group: nginx
     mode: "0755"
-    recurse: yes
 
 - name: Set correct permissions for the app directory
   file:
