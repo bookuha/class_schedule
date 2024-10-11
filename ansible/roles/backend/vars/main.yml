@@ -1,0 +1,13 @@
+db_host: "rds.amazonaws.com"
+db_port: "5432"
+db_user: "class_schedule_user"
+db_password: "somepass"
+db_name: "class_schedule"
+redis_host: "cache.amazonaws.com"
+redis_port: "6379"
+mongo_current_db: "class_schedule"
+mongo_default_server_cluster: "documentstore.amazonaws.com"
+aws_codeartifact_package: "class_schedule_backend"
+aws_codeartifact_package_version: "1"
+aws_codeartifact_asset: "class_schedule_backend-1.war"
+aws_codeartifact_namespace: com.class_schedule

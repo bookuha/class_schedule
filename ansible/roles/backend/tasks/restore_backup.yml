@@ -1,0 +1,31 @@
+- name: Install PSQL
+  yum:
+    name: postgresql15
+    state: present
+    update_cache: yes
+
+- name: Create /backup directory if not exists
+  file:
+    path: /backup
+    state: directory
+    mode: "0755"
+
+- name: Copy restore_backup.sh script to backend
+  copy:
+    src: "{{ workspace_path }}/scripts/restore_backup.sh"
+    dest: /usr/local/bin/restore_backup.sh
+    mode: "0755"
+
+- name: Copy SQL backup to backend
+  copy:
+    src: "{{ workspace_path }}/backup/backup.dump"
+    dest: /backup/backup.dump
+
+- name: Run restore_backup.sh script to restore the database
+  command: /usr/local/bin/restore_backup.sh
+  environment:
+    DB_HOST: "{{ db_host }}"
+    DB_PORT: "{{ db_port }}"
+    DB_USER: "{{ db_user }}"
+    DB_PASSWORD: "{{ db_password }}"
+    DB_NAME: "{{ db_name }}"

@@ -238,7 +238,7 @@ publishing {
     publications {
         mavenJava(MavenPublication) {
             groupId = 'com.class_schedule'
-            artifactId = 'cs_be'
+            artifactId = 'class_schedule_backend'
             version = '1'
             from components.web
         }
@@ -246,10 +246,10 @@ publishing {
     repositories {
         maven {
             // Construct URL from environment variables
-            def domain = System.env.CODEARTIFACT_DOMAIN ?: "class-schedule"
+            def domain = System.env.AWS_CODEARTIFACT_DOMAIN ?: "class-schedule"
             def accountId = System.env.AWS_ACCOUNT_ID
             def region = System.env.AWS_REGION ?: "eu-north-1"
-            def repo = System.env.CODEARTIFACT_REPO ?: "class_schedule"
+            def repo = System.env.AWS_CODEARTIFACT_REPO ?: "class_schedule"
             
             url "https://${domain}-${accountId}.d.codeartifact.${region}.amazonaws.com/maven/${repo}/"
             credentials {

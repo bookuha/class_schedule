@@ -1,0 +1,10 @@
+- name: Remove existing ROOT folder in Tomcat webapps directory
+  file:
+    path: "/opt/tomcat/webapps/ROOT"
+    state: absent
+  become: yes
+- name: Fetch .war file from AWS CodeArtifact
+  command: >
+    aws codeartifact get-package-version-asset --domain {{ aws_codeartifact_domain }} --repository {{ aws_codeartifact_repo }} --region {{ aws_region }} --package {{ aws_codeartifact_package }} --package-version {{ aws_codeartifact_package_version }} --asset {{ aws_codeartifact_asset }} --format maven --namespace {{ aws_codeartifact_namespace }} /opt/tomcat/webapps/ROOT.war
+
+  become: yes
