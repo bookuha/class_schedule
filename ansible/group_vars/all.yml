@@ -1,0 +1,3 @@
+aws_codeartifact_domain: "class-schedule"
+aws_codeartifact_repo: "class_schedule"
+aws_region: "eu-north-1"

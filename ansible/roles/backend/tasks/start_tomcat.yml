@@ -1,0 +1,46 @@
+- name: Create Tomcat systemd service file
+  copy:
+    dest: /etc/systemd/system/tomcat.service
+    content: |
+      [Unit]
+      Description=Apache Tomcat Web Application Container
+      After=network.target
+
+      [Service]
+      Type=forking
+
+      Environment=JAVA_HOME=/usr/lib/jvm/jre-11-openjdk
+      Environment=CATALINA_PID=/opt/tomcat/temp/tomcat.pid
+      Environment=CATALINA_HOME=/opt/tomcat
+      Environment=CATALINA_BASE=/opt/tomcat
+
+
+      Environment=DB_HOST={{ db_host }}
+      Environment=DB_PORT={{ db_port }}
+      Environment=DB_USER={{ db_user }}
+      Environment=DB_PASSWORD={{ db_password }}
+      Environment=DB_NAME={{ db_name }}
+      Environment=REDIS_HOST={{ redis_host }}
+      Environment=REDIS_PORT={{ redis_port }}
+      Environment=MONGO_CURRENT_DB={{ mongo_current_db }}
+      Environment=MONGO_DEFAULT_SERVER_CLUSTER={{ mongo_default_server_cluster }}
+
+      ExecStart=/opt/tomcat/bin/startup.sh
+      ExecStop=/opt/tomcat/bin/shutdown.sh
+
+      User=tomcat
+      Group=tomcat
+      UMask=0007
+      RestartSec=10
+      Restart=always
+
+      [Install]
+      WantedBy=multi-user.target
+- name: Reload systemd to apply the new Tomcat service
+  systemd:
+    daemon_reload: yes
+- name: Start and enable Tomcat service
+  systemd:
+    name: tomcat
+    state: started
+    enabled: yes

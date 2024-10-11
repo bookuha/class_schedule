@@ -1,0 +1,2 @@
+# vars/main.yml
+api_ip: "backend-ip.com"

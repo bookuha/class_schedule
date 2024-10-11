@@ -1,0 +1,40 @@
+- name: Install Nginx
+  yum:
+    name: nginx
+    state: present
+    update_cache: yes
+
+- name: Remove default Nginx configuration
+  file:
+    path: /etc/nginx/conf.d/default.conf
+    state: absent
+
+- name: Upload custom Nginx configuration for React app
+  copy:
+    src: nginx-react.conf
+    dest: /etc/nginx/conf.d/react_app.conf
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: Copy built React app to server
+  copy:
+    src: "{{ workspace_path }}/frontend/build/"
+    dest: /var/www/react_app/
+    owner: nginx
+    group: nginx
+    mode: "0755"
+
+- name: Set correct permissions for the app directory
+  file:
+    path: /var/www/react_app/
+    owner: nginx
+    group: nginx
+    mode: "0755"
+    recurse: yes
+
+- name: Start and enable Nginx service
+  service:
+    name: nginx
+    state: started
+    enabled: yes
