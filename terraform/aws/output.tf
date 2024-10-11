@@ -10,10 +10,10 @@ output "backend_instance_public_ip" {
   value       = aws_instance.backend_instance.public_ip
 }
 
-# Output for MongoDB instance public IP
+# Output for MongoDB DocumentDB Cluster Endpoint
 output "mongo_instance_public_ip" {
-  description = "Public IP address of the MongoDB EC2 instance"
-  value       = aws_instance.mongo_instance.public_ip
+  description = "Endpoint of the MongoDB DocumentDB cluster"
+  value       = aws_docdb_cluster.mongo_cluster.endpoint
 }
 
 # Output for Postgres instance public IP

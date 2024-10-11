@@ -28,6 +28,36 @@ variable "mongo_name_tag" {
   default     = "cs_mongo"
 }
 
+variable "mongo_cluster_identifier" {
+  type        = string
+  description = "Mongo Cluster Identifier"
+  default     = "mongo-cluster"
+}
+
+variable "mongo_instance_identifier" {
+  type        = string
+  description = "Mongo Instance Identifier"
+  default     = "mongo-instance"
+}
+
+variable "mongo_instance_class" {
+  type        = string
+  description = "Mongo Instance Class"
+  default     = "db.t3.medium"
+}
+
+variable "mongo_master_username" {
+  type        = string
+  description = "Mongo Master Username"
+  sensitive   = true
+}
+
+variable "mongo_master_password" {
+  type        = string
+  description = "Mongo Master Password"
+  sensitive   = true
+}
+
 variable "redis_node_type" {
   type        = string
   description = "Redis Node Type"

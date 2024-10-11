@@ -38,6 +38,15 @@ resource "aws_security_group_rule" "be_to_db" {
   source_security_group_id = aws_security_group.db_sg.id
 }
 
+resource "aws_security_group_rule" "be_to_mongo" {
+  type                     = "egress"
+  from_port                = 27017
+  to_port                  = 27017
+  protocol                 = "tcp"
+  security_group_id        = aws_security_group.be_sg.id
+  source_security_group_id = aws_security_group.mongo_sg.id
+}
+
 resource "aws_security_group_rule" "be_to_redis" {
   type                     = "egress"
   from_port                = 6379

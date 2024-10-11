@@ -30,6 +30,8 @@ pipeline {
                 TF_VAR_aws_secret_access_key = credentials('aws-tf-secret-access-key')
                 TF_VAR_postgres_username = credentials('aws-rds-postgres-username')
                 TF_VAR_postgres_password = credentials('aws-rds-postgres-password')
+                TF_VAR_mongo_master_username = credentials('aws-ddb-mongo-username')
+                TF_VAR_mongo_master_password = credentials('aws-ddb-mongo-password')
             }
             steps {
                 dir('terraform/aws') {
@@ -63,6 +65,8 @@ pipeline {
             environment {
                 ANSIBLE_HOST_KEY_CHECKING='False'
                 DB_PASS = credentials('aws-rds-postgres-password')
+                MONGO_USERNAME = credentials('aws-ddb-mongo-username')
+                MONGO_PASSWORD = credentials('aws-ddb-mongo-password')
             }
             steps {
                 script {
@@ -70,7 +74,7 @@ pipeline {
                         // Run Backend Playbook
                         sh """
                             ansible-playbook -i ${BACKEND_IP}, backend_playbook.yml \
-                            --extra-vars "db_host=${POSTGRES_IP} db_password=${DB_PASS} redis_host=${REDIS_IP} mongo_default_server_cluster=${MONGO_IP} workspace_path=${WORKSPACE}" \
+                            --extra-vars "db_host=${POSTGRES_IP} db_password=${DB_PASS} redis_host=${REDIS_IP} mongo_first_cluster=${MONGO_IP} mongo_username=${MONGO_USERNAME} mongo_password=${MONGO_PASSWORD} workspace_path=${WORKSPACE}" \
                             -u ec2-user \
                             --private-key ~/.ssh/id_rsa
                         """
