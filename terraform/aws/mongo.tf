@@ -12,6 +12,7 @@ resource "aws_docdb_cluster" "mongo_cluster" {
 }
 
 resource "aws_docdb_cluster_instance" "mongo_instance" {
+  provider                = aws.docdb_region
   identifier              = var.mongo_instance_identifier
   cluster_identifier      = aws_docdb_cluster.mongo_cluster.id
   instance_class          = var.mongo_instance_class
@@ -23,6 +24,7 @@ resource "aws_docdb_cluster_instance" "mongo_instance" {
 }
 
 resource "aws_security_group" "mongo_sg" {
+  provider    = aws.docdb_region
   name        = "mongo-security-group"
   description = "Allow backend to access DocDb"
   tags = {
@@ -31,10 +33,11 @@ resource "aws_security_group" "mongo_sg" {
 }
 
 resource "aws_security_group_rule" "mongo_to_be" {
+  provider                 = aws.docdb_region
   type                     = "ingress"
   from_port                = 27017
   to_port                  = 27017
   protocol                 = "tcp"
   security_group_id        = aws_security_group.mongo_sg.id
-  source_security_group_id = aws_security_group.be_sg.id
+  cidr_blocks              = ["0.0.0.0/0"] # TODO: Cross-Region VPC Peering / Correct CIDR
 }

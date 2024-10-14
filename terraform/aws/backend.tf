@@ -45,7 +45,7 @@ resource "aws_security_group_rule" "be_to_mongo" {
   to_port                  = 27017
   protocol                 = "tcp"
   security_group_id        = aws_security_group.be_sg.id
-  source_security_group_id = aws_security_group.mongo_sg.id
+  cidr_blocks              = ["0.0.0.0/0"] # TODO: Cross-Region VPC Peering / Correct CIDR
 }
 
 resource "aws_security_group_rule" "be_to_redis" {
