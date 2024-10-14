@@ -27,3 +27,9 @@ output "redis_instance_public_ip" {
   description = "Public IP address of the ElastiCache Redis instance"
   value       = aws_elasticache_cluster.redis.cache_nodes[0].address
 }
+
+# Output for Monitoring instance public IP
+output "monitoring_instance_public_ip" {
+  description = "Public IP address of the Monitoring instance"
+  value       = aws_instance.monitoring_instance.public_ip
+}

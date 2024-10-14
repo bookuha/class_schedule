@@ -22,6 +22,12 @@ variable "backend_name_tag" {
   default     = "cs_be"
 }
 
+variable "monitoring_name_tag" {
+  type        = string
+  description = "Name of the EC2 Monitoring Instance"
+  default     = "cs_mn"
+}
+
 variable "mongo_name_tag" {
   type        = string
   description = "Name of the EC2 Mongo Instance"
