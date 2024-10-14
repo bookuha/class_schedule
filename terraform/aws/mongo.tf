@@ -3,7 +3,6 @@ resource "aws_docdb_cluster" "mongo_cluster" {
   master_username         = var.mongo_master_username
   master_password         = var.mongo_master_password
   skip_final_snapshot     = true
-  engine_version          = "4.0.0" # DocumentDB uses MongoDB 3.6 compatibility
   vpc_security_group_ids  = [aws_security_group.mongo_sg.id]
   
   tags = {
