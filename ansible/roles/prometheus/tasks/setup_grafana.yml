@@ -1,0 +1,47 @@
+---
+- name: Install Grafana
+  ansible.builtin.yum:
+    name:
+      - https://dl.grafana.com/oss/release/grafana-9.5.2-1.x86_64.rpm  # Update to the latest version as needed
+    state: present
+
+- name: Start and enable Grafana service
+  ansible.builtin.systemd:
+    name: grafana-server
+    enabled: yes
+    state: started
+
+- name: Wait for Grafana to start
+  ansible.builtin.wait_for:
+    port: 3000
+    delay: 10
+    timeout: 30
+
+- name: Create Grafana data source for Prometheus
+  ansible.builtin.uri:
+    url: http://localhost:3000/api/datasources
+    method: POST
+    user: admin  # Default Grafana admin user
+    password: admin  # Default Grafana admin password
+    body_format: json
+    body:
+      name: 'Prometheus'
+      type: 'prometheus'
+      url: 'http://localhost:9090'  # URL for the local Prometheus server
+      access: 'proxy'
+    status_code: 200  # Expecting HTTP 200 response
+    headers:
+      Content-Type: application/json
+
+- name: Set Grafana admin password
+  ansible.builtin.uri:
+    url: http://localhost:3000/api/admin/users/1/password
+    method: PUT
+    user: admin
+    password: admin
+    body_format: json
+    body:
+      password: '{{ grafana_admin_password }}'  # Use a variable for the admin password
+    status_code: 200
+    headers:
+      Content-Type: application/json

@@ -7,6 +7,7 @@ resource "aws_instance" "frontend_instance" {
 
   tags = {
     Name = var.frontend_name_tag
+    Role = var.node_exporter_role_tag
   }
 }
 

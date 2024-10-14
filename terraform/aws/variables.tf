@@ -22,16 +22,34 @@ variable "backend_name_tag" {
   default     = "cs_be"
 }
 
-variable "monitoring_name_tag" {
+variable "prometheus_name_tag" {
   type        = string
-  description = "Name of the EC2 Monitoring Instance"
-  default     = "cs_mn"
+  description = "Name of the EC2 Prometheus Instance"
+  default     = "cs_prom"
+}
+
+variable "cloudwatch_name_tag" {
+  type        = string
+  description = "Name of the EC2 CloudWatch Exporter Instance"
+  default     = "cs_cwatch"
 }
 
 variable "mongo_name_tag" {
   type        = string
   description = "Name of the EC2 Mongo Instance"
   default     = "cs_mongo"
+}
+
+variable "node_exporter_role_tag" {
+  type        = string
+  description = "Role tag for instances that have Node Exporter set up on them. Required for dynamic discovery of such services by Prometheus."
+  default     = "node-exporter"
+}
+
+variable "cloudwatch_exporter_role_tag" {
+  type        = string
+  description = "Role tag for instances that have CloudWatch Exporter set up on them. Required for dynamic discovery of such services by Prometheus."
+  default     = "cloudwatch-exporter"
 }
 
 variable "mongo_cluster_identifier" {

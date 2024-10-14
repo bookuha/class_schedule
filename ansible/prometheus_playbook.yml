@@ -1,0 +1,6 @@
+# prometheus_playbook.yml
+
+- hosts: all # (prometheus) Change to your group, if you're using inventory file
+  become: yes
+  roles:
+    - prometheus

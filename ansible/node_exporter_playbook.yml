@@ -1,0 +1,6 @@
+# node_exporter_playbook.yml
+
+- hosts: all # (web_servers) Change to your group, if you're using inventory file
+  become: yes
+  roles:
+    - node_exporter

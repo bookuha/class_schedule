@@ -28,8 +28,14 @@ output "redis_instance_public_ip" {
   value       = aws_elasticache_cluster.redis.cache_nodes[0].address
 }
 
-# Output for Monitoring instance public IP
-output "monitoring_instance_public_ip" {
-  description = "Public IP address of the Monitoring instance"
-  value       = aws_instance.monitoring_instance.public_ip
+# Output for Prometheus instance public IP
+output "prometheus_instance_public_ip" {
+  description = "Public IP address of the Prometheus instance"
+  value       = aws_instance.prometheus_instance.public_ip
+}
+
+# Output for Cloudwatch instance public IP
+output "cloudwatch_instance_public_ip" {
+  description = "Public IP address of the CloudWatch Exporter instance"
+  value       = aws_instance.cloudwatch_instance.public_ip
 }

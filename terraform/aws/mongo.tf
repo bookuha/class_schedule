@@ -15,7 +15,6 @@ resource "aws_docdb_cluster_instance" "mongo_instance" {
   identifier              = var.mongo_instance_identifier
   cluster_identifier      = aws_docdb_cluster.mongo_cluster.id
   instance_class          = var.mongo_instance_class
-  engine_version          = "4.0.0"
   apply_immediately       = true
   
   tags = {

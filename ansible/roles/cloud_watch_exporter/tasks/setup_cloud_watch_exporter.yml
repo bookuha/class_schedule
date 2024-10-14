@@ -1,0 +1,48 @@
+---
+# tasks/setup_cloud_watch_exporter.yml
+
+- name: Install necessary packages
+  ansible.builtin.yum:
+    name:
+      - wget
+      - unzip
+    state: present
+
+- name: Download CloudWatch Exporter
+  ansible.builtin.get_url:
+    url: "https://github.com/oliver006/cloudwatch_exporter/releases/download/v{{ cloudwatch_exporter_version }}/cloudwatch_exporter-{{ cloudwatch_exporter_version }}.zip"
+    dest: /tmp/cloudwatch_exporter.zip
+
+- name: Unzip CloudWatch Exporter
+  ansible.builtin.unarchive:
+    src: /tmp/cloudwatch_exporter.zip
+    dest: /opt/
+    remote_src: yes
+
+- name: Move CloudWatch Exporter binary to /usr/local/bin
+  ansible.builtin.command:
+    cmd: mv /opt/cloudwatch_exporter-{{ cloudwatch_exporter_version }}/cloudwatch_exporter /usr/local/bin/
+  args:
+    creates: /usr/local/bin/cloudwatch_exporter
+
+- name: Create CloudWatch Exporter configuration file
+  ansible.builtin.template:
+    src: cloudwatch_exporter.yml.j2
+    dest: /etc/cloudwatch_exporter.yml
+    mode: "0644"
+
+- name: Create systemd service for CloudWatch Exporter
+  ansible.builtin.template:
+    src: cloudwatch_exporter.service.j2
+    dest: /etc/systemd/system/cloudwatch_exporter.service
+    mode: "0644"
+
+- name: Reload systemd daemon
+  ansible.builtin.systemd:
+    daemon_reload: yes
+
+- name: Enable and start CloudWatch Exporter service
+  ansible.builtin.systemd:
+    name: cloudwatch_exporter
+    enabled: yes
+    state: started

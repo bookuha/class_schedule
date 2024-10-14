@@ -1,0 +1,68 @@
+---
+# tasks/main.yml
+
+- name: Ensure required packages are installed
+  ansible.builtin.yum:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - wget
+    - tar
+
+- name: Create a user for Prometheus
+  ansible.builtin.user:
+    name: prometheus
+    system: yes
+    shell: /sbin/nologin
+
+- name: Create directories for Prometheus
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: prometheus
+    group: prometheus
+    mode: 0755
+  loop:
+    - /etc/prometheus
+    - /var/lib/prometheus
+
+- name: Download Prometheus tarball
+  ansible.builtin.get_url:
+    url: https://github.com/prometheus/prometheus/releases/download/{{ prometheus_version }}/prometheus-{{ prometheus_version }}.linux-amd64.tar.gz
+    dest: /tmp/prometheus.tar.gz
+    mode: "0644"
+
+- name: Extract Prometheus
+  ansible.builtin.unarchive:
+    src: /tmp/prometheus.tar.gz
+    dest: /opt/
+    remote_src: yes
+
+- name: Move Prometheus binaries
+  ansible.builtin.command: mv /opt/prometheus-{{ prometheus_version }}.linux-amd64/{prometheus,promtool} /usr/local/bin/
+  args:
+    creates: /usr/local/bin/prometheus
+
+- name: Move Prometheus configuration files
+  ansible.builtin.template:
+    src: prometheus.yml.j2 # Updated to use Jinja2 template
+    dest: /etc/prometheus/prometheus.yml
+    owner: prometheus
+    group: prometheus
+    mode: 0644
+
+- name: Set up Prometheus systemd service
+  ansible.builtin.template:
+    src: prometheus.service.j2
+    dest: /etc/systemd/system/prometheus.service
+    mode: "0644"
+
+- name: Reload systemd daemon
+  ansible.builtin.systemd:
+    daemon_reload: yes
+
+- name: Enable and start Prometheus service
+  ansible.builtin.systemd:
+    name: prometheus
+    enabled: yes
+    state: started

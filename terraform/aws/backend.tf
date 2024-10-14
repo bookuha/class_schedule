@@ -7,12 +7,13 @@ resource "aws_instance" "backend_instance" {
 
   tags = {
     Name = var.backend_name_tag
+    Role = var.node_exporter_role_tag
   }
 
   depends_on = [
     aws_db_instance.postgres,
     aws_elasticache_cluster.redis,
-    aws_instance.mongo_instance
+    aws_docdb_cluster.mongo_cluster
   ]
 }
 

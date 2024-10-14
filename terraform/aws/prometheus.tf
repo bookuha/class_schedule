@@ -1,16 +1,17 @@
-resource "aws_instance" "monitoring_instance" {
+resource "aws_instance" "prometheus_instance" {
   ami                  = var.ami
   instance_type        = var.instance_type
-  security_groups      = [aws_security_group.app_sg.name, aws_security_group.monitoring_sg.name]
+  security_groups      = [aws_security_group.app_sg.name, aws_security_group.prometheus_sg.name]
+  iam_instance_profile = aws_iam_instance_profile.prometheus_instance_profile.name
   key_name             = aws_key_pair.ssh-key.key_name
 
   tags = {
-    Name = var.monitoring_name_tag
+    Name = var.prometheus_name_tag
   }
 }
 
-resource "aws_security_group" "monitoring_sg" {
-  name        = "cs_monitoring_sg"
+resource "aws_security_group" "prometheus_sg" {
+  name        = "cs_prometheus_sg"
   description = "Allow inbound traffic for Prometheus"
 
   ingress {
