@@ -5,30 +5,29 @@
   ansible.builtin.yum:
     name:
       - wget
-      - unzip
+      - java  # Ensure Java is installed
     state: present
 
-- name: Download CloudWatch Exporter
+- name: Create cloudwatch_exporter user
+  ansible.builtin.user:
+    name: cloudwatch_exporter
+    system: yes
+    shell: /sbin/nologin
+
+- name: Download CloudWatch Exporter JAR
   ansible.builtin.get_url:
-    url: "https://github.com/oliver006/cloudwatch_exporter/releases/download/v{{ cloudwatch_exporter_version }}/cloudwatch_exporter-{{ cloudwatch_exporter_version }}.zip"
-    dest: /tmp/cloudwatch_exporter.zip
-
-- name: Unzip CloudWatch Exporter
-  ansible.builtin.unarchive:
-    src: /tmp/cloudwatch_exporter.zip
-    dest: /opt/
-    remote_src: yes
-
-- name: Move CloudWatch Exporter binary to /usr/local/bin
-  ansible.builtin.command:
-    cmd: mv /opt/cloudwatch_exporter-{{ cloudwatch_exporter_version }}/cloudwatch_exporter /usr/local/bin/
-  args:
-    creates: /usr/local/bin/cloudwatch_exporter
+    url: "https://github.com/prometheus/cloudwatch_exporter/releases/download/v{{ cloudwatch_exporter_version }}/cloudwatch_exporter-{{ cloudwatch_exporter_version }}-jar-with-dependencies.jar"
+    dest: /opt/cloudwatch_exporter.jar
+    owner: cloudwatch_exporter
+    group: cloudwatch_exporter
+    mode: '0755'
 
 - name: Create CloudWatch Exporter configuration file
   ansible.builtin.template:
     src: cloudwatch_exporter.yml.j2
     dest: /etc/cloudwatch_exporter.yml
+    owner: cloudwatch_exporter
+    group: cloudwatch_exporter
     mode: "0644"
 
 - name: Create systemd service for CloudWatch Exporter
@@ -46,3 +45,10 @@
     name: cloudwatch_exporter
     enabled: yes
     state: started
+
+- name: Ensure the CloudWatch Exporter is running
+  ansible.builtin.systemd:
+    name: cloudwatch_exporter
+    state: started
+    enabled: yes
+

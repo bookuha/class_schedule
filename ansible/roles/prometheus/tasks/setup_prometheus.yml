@@ -28,7 +28,7 @@
 
 - name: Download Prometheus tarball
   ansible.builtin.get_url:
-    url: https://github.com/prometheus/prometheus/releases/download/{{ prometheus_version }}/prometheus-{{ prometheus_version }}.linux-amd64.tar.gz
+    url: https://github.com/prometheus/prometheus/releases/download/v{{ prometheus_version }}/prometheus-{{ prometheus_version }}.linux-amd64.tar.gz
     dest: /tmp/prometheus.tar.gz
     mode: "0644"
 
@@ -38,10 +38,15 @@
     dest: /opt/
     remote_src: yes
 
-- name: Move Prometheus binaries
-  ansible.builtin.command: mv /opt/prometheus-{{ prometheus_version }}.linux-amd64/{prometheus,promtool} /usr/local/bin/
+- name: Move Prometheus binary
+  ansible.builtin.command: mv /opt/prometheus-{{ prometheus_version }}.linux-amd64/prometheus /usr/local/bin/
   args:
     creates: /usr/local/bin/prometheus
+
+- name: Move Promtool binary
+  ansible.builtin.command: mv /opt/prometheus-{{ prometheus_version }}.linux-amd64/promtool /usr/local/bin/
+  args:
+    creates: /usr/local/bin/promtool
 
 - name: Move Prometheus configuration files
   ansible.builtin.template:

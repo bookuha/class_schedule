@@ -1,31 +1,29 @@
 global:
-  scrape_interval: 15s  # Set the global scrape interval to 15 seconds
+  scrape_interval: 15s  # Default scrape interval
 
 scrape_configs:
-  - job_name: 'node_exporter'
+  - job_name: 'ec2-node-exporter'
     ec2_sd_configs:
-      - region: {{ aws_region }}
-        filters:
-          - name: tag:Role
-            values:
-              - node-exporter
-
+      - region: 'eu-north-1'
+      - port: 9100
     relabel_configs:
+      - source_labels: [__meta_ec2_tag_Role]
+        action: keep
+        regex: "node-exporter"  # Keep only instances with the "node-exporter" tag
       - source_labels: [__meta_ec2_private_ip]
-        target_label: __address__
-        replacement: ':9100'
         action: replace
+        target_label: __address__
+        replacement: ${1}:9100  # Use port 9101 for metrics
 
-  - job_name: 'cloudwatch_exporter'
+  - job_name: 'ec2-cloudwatch-exporter'
     ec2_sd_configs:
-      - region: {{ aws_region }}
-        filters:
-          - name: tag:Role
-            values:
-              - cloudwatch-exporter
-
+      - region: 'eu-north-1'
+      - port: 9106
     relabel_configs:
+      - source_labels: [__meta_ec2_tag_Role]
+        action: keep
+        regex: "cloudwatch-exporter"  # Keep only instances with the "cloudwatch-exporter" tag
       - source_labels: [__meta_ec2_private_ip]
-        target_label: __address__
-        replacement: ':9106'
         action: replace
+        target_label: __address__
+        replacement: ${1}:9106  # Use port 9106 for metrics

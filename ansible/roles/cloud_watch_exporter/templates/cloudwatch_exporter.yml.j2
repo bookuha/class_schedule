@@ -1,32 +1,45 @@
 region: {{ aws_region }}
 metrics:
-  - namespace: AWS/ElastiCache
-    metrics:
-      - Name: CacheHits
-        Statistics:
-          - Average
-          - Sum
-      - Name: CacheMisses
-        Statistics:
-          - Average
-          - Sum
-  - namespace: AWS/RDS
-    metrics:
-      - Name: CPUUtilization
-        Statistics:
-          - Average
-          - Maximum
-      - Name: FreeStorageSpace
-        Statistics:
-          - Average
-          - Minimum
-  - namespace: AWS/DocDB
-    metrics:
-      - Name: CPUUtilization
-        Statistics:
-          - Average
-          - Maximum
-      - Name: FreeStorageSpace
-        Statistics:
-          - Average
-          - Minimum
+  - aws_namespace: AWS/ElastiCache
+    aws_dimensions:
+      - CacheClusterId
+    aws_metric_name: CacheHits
+    aws_statistics:
+      - Average
+      - Sum
+  - aws_namespace: AWS/ElastiCache
+    aws_dimensions:
+      - CacheClusterId
+    aws_metric_name: CacheMisses
+    aws_statistics:
+      - Average
+      - Sum
+  - aws_namespace: AWS/RDS
+    aws_dimensions:
+      - DBInstanceIdentifier
+    aws_metric_name: CPUUtilization
+    aws_statistics:
+      - Average
+      - Maximum
+  - aws_namespace: AWS/RDS
+    aws_dimensions:
+      - DBInstanceIdentifier
+    aws_metric_name: FreeStorageSpace
+    aws_statistics:
+      - Average
+      - Minimum
+  - aws_namespace: AWS/DocDB
+    aws_dimensions:
+      - DBInstanceIdentifier
+    aws_metric_name: CPUUtilization
+    aws_statistics:
+      - Average
+      - Maximum
+  - aws_namespace: AWS/DocDB
+    aws_dimensions:
+      - DBInstanceIdentifier
+    aws_metric_name: FreeStorageSpace
+    aws_statistics:
+      - Average
+      - Minimum
+
