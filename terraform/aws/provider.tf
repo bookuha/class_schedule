@@ -12,3 +12,10 @@ provider "aws" {
   access_key = var.aws_access_key_id
   secret_key = var.aws_secret_access_key
 }
+
+provider "aws" {
+  region = "eu-west-3"  # Region for DocumentDB
+  alias  = "docdb_region"  # Alias for this provider
+  access_key = var.aws_access_key_id
+  secret_key = var.aws_secret_access_key
+}

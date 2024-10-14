@@ -1,4 +1,5 @@
 resource "aws_docdb_cluster" "mongo_cluster" {
+  provider                = aws.docdb_region
   cluster_identifier      = var.mongo_cluster_identifier
   master_username         = var.mongo_master_username
   master_password         = var.mongo_master_password
