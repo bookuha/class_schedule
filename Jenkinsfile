@@ -7,7 +7,8 @@ pipeline {
         AWS_REGION = credentials('aws-region')
         AWS_CODEARTIFACT_REPO = credentials('aws-codeartifact-repo')
     }
-
+    
+    stages {
         stage('Publish Backend to AWS CodeArtifact') {
             steps {
                 sh 'chmod +x publish_to_codeartifact.sh'
@@ -123,6 +124,7 @@ pipeline {
                 }
             }
         }
+    }
 
     post {
         always {
