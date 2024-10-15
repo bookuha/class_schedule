@@ -9,21 +9,6 @@ pipeline {
     }
     
     stages {
-
-        stage('Check AWS Region') {
-            steps {
-                sh '''
-                    echo $AWS_REGION > tmp
-                    echo $AWS_ACCOUNT_ID >> tmp
-                    echo $AWS_CODEARTIFACT_DOMAIN >> tmp
-                    echo $AWS_CODEARTIFACT_DOMAIN >> tmp
-                '''
-
-                sh 'cat tmp'
-            }
-        }
-
-
         stage('Publish Backend to AWS CodeArtifact') {
             steps {
                 sh 'chmod +x publish_to_codeartifact.sh'
