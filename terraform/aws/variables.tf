@@ -135,3 +135,32 @@ variable "aws_secret_access_key" {
   description = "AWS Secret Access Key"
   sensitive   = true
 }
+
+variable "codeartifact_domain" {
+  type        = string
+  description = "AWS CodeArtifact Domain"
+  default     = "class-schedule"
+  sensitive   = true
+}
+
+variable "codeartifact_repo" {
+  type        = string
+  description = "AWS CodeArtifact Repository"
+  default     = "class_schedule"
+  sensitive   = true
+}
+
+variable "aws_account_id" {
+  type        = string
+  description = "AWS Account Id"
+  sensitive   = true
+}
+
+variable "aws_region" {
+  type        = string
+  description = "AWS Region"
+  default     = "eu-north-1"
+}
+
+
+
