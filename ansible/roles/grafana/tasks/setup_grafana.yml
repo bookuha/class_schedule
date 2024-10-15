@@ -1,22 +1,29 @@
 ---
-- name: Add swap space
-  block:
-    - name: Create a swap file
-      command: dd if=/dev/zero of=/swapfile bs=1M count=1024
-      args:
-        removes: /swapfile
+- name: Disable existing swap file
+  command: swapoff /swapfile
+  ignore_errors: true  # This will ignore errors if the swap file doesn't exist
 
-    - name: Set up swap space
-      command: mkswap /swapfile
+- name: Remove existing swap file
+  command: rm -f /swapfile
+  ignore_errors: true  # Ignore if it doesn't exist
 
-    - name: Enable swap file
-      command: swapon /swapfile
+- name: Create a swap file
+  command: dd if=/dev/zero of=/swapfile bs=1M count=1024
+  args:
+    creates: /swapfile  # This will prevent the task from running if the file already exists
 
-    - name: Make swap file permanent
-      lineinfile:
-        path: /etc/fstab
-        line: "/swapfile swap swap defaults 0 0"
-        state: present
+- name: Set up swap space
+  command: mkswap /swapfile
+  when: ansible_facts['os_family'] == "RedHat"  # Make sure this is only run on RedHat-based systems
+
+- name: Enable swap file
+  command: swapon /swapfile
+
+- name: Make swap file permanent
+  lineinfile:
+    path: /etc/fstab
+    line: '/swapfile swap swap defaults 0 0'
+    state: present
 
 - name: Add Grafana GPG key
   get_url:
@@ -42,31 +49,15 @@
     name: grafana
     state: present
 
-- name: Create Grafana data source for Prometheus
-  ansible.builtin.uri:
-    url: http://localhost:3000/api/datasources
-    method: POST
-    user: admin # Default Grafana admin user
-    password: admin # Default Grafana admin password
-    body_format: json
-    body:
-      name: "Prometheus"
-      type: "prometheus"
-      url: "http://{{ prometheus_ip }}:9090" # URL for the local Prometheus server
-      access: "proxy"
-    status_code: 200 # Expecting HTTP 200 response
-    headers:
-      Content-Type: application/json
+- name: Start Grafana service
+  systemd:
+    name: grafana-server
+    state: started
+    enabled: yes  # Ensure it starts on boot
 
-- name: Set Grafana admin password
-  ansible.builtin.uri:
-    url: http://localhost:3000/api/admin/users/1/password
-    method: PUT
-    user: admin
-    password: admin
-    body_format: json
-    body:
-      password: "{{ grafana_admin_password }}" # Use a variable for the admin password
-    status_code: 200
-    headers:
-      Content-Type: application/json
+- name: Wait for Grafana to start
+  wait_for:
+    port: 3000
+    timeout: 30
+
+
