@@ -28,6 +28,12 @@ variable "prometheus_name_tag" {
   default     = "cs_prom"
 }
 
+variable "grafana_name_tag" {
+  type        = string
+  description = "Name of the EC2 Grafana Instance"
+  default     = "cs_graf"
+}
+
 variable "cloudwatch_name_tag" {
   type        = string
   description = "Name of the EC2 CloudWatch Exporter Instance"

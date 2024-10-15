@@ -1,5 +1,5 @@
 ---
-# tasks/main.yml
+# tasks/seup_prometheus.yml
 
 - name: Ensure required packages are installed
   ansible.builtin.yum:

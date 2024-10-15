@@ -34,6 +34,12 @@ output "prometheus_instance_public_ip" {
   value       = aws_instance.prometheus_instance.public_ip
 }
 
+# Output for Grafana instance public IP
+output "grafana_instance_public_ip" {
+  description = "Public IP address of the Grafana instance"
+  value       = aws_instance.grafana_instance.public_ip
+}
+
 # Output for Cloudwatch instance public IP
 output "cloudwatch_instance_public_ip" {
   description = "Public IP address of the CloudWatch Exporter instance"

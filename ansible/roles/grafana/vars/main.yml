@@ -1,0 +1,2 @@
+prometheus_ip: "localhost"
+grafana_admin_password: "passpass"

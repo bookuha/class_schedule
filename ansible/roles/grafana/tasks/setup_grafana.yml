@@ -1,0 +1,53 @@
+---
+- name: Add Grafana GPG key
+  get_url:
+    url: https://rpm.grafana.com/gpg.key
+    dest: /etc/pki/rpm-gpg/RPM-GPG-KEY-grafana
+
+- name: Add Grafana repository
+  copy:
+    dest: /etc/yum.repos.d/grafana.repo
+    content: |
+      [grafana]
+      name=grafana
+      baseurl=https://rpm.grafana.com
+      repo_gpgcheck=1
+      enabled=1
+      gpgcheck=1
+      gpgkey=https://rpm.grafana.com/gpg.key
+      sslverify=1
+      sslcacert=/etc/pki/tls/certs/ca-bundle.crt
+
+- name: Install Grafana
+  yum:
+    name: grafana
+    state: present
+
+- name: Create Grafana data source for Prometheus
+  ansible.builtin.uri:
+    url: http://localhost:3000/api/datasources
+    method: POST
+    user: admin # Default Grafana admin user
+    password: admin # Default Grafana admin password
+    body_format: json
+    body:
+      name: "Prometheus"
+      type: "prometheus"
+      url: "http://{{ prometheus_ip }}:9090" # URL for the local Prometheus server
+      access: "proxy"
+    status_code: 200 # Expecting HTTP 200 response
+    headers:
+      Content-Type: application/json
+
+- name: Set Grafana admin password
+  ansible.builtin.uri:
+    url: http://localhost:3000/api/admin/users/1/password
+    method: PUT
+    user: admin
+    password: admin
+    body_format: json
+    body:
+      password: "{{ grafana_admin_password }}" # Use a variable for the admin password
+    status_code: 200
+    headers:
+      Content-Type: application/json
