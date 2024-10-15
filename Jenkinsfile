@@ -12,12 +12,14 @@ pipeline {
 
         stage('Check AWS Region') {
             steps {
-                script {
-                    echo "AWS Region is: ${env.AWS_REGION}"
-                    echo "AWS Region is: ${env.AWS_CODEARTIFACT_DOMAIN}"
-                    echo "AWS Region is: ${env.AWS_ACCOUNT_ID}"
-                    echo "AWS Region is: ${env.AWS_CODEARTIFACT_REPO}"
-                }
+                sh '''
+                    echo $AWS_REGION > tmp
+                    echo $AWS_ACCOUNT_ID >> tmp
+                    echo $AWS_CODEARTIFACT_DOMAIN >> tmp
+                    echo $AWS_CODEARTIFACT_DOMAIN >> tmp
+                '''
+
+                sh 'cat tmp'
             }
         }
 
