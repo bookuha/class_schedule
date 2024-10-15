@@ -9,6 +9,19 @@ pipeline {
     }
     
     stages {
+
+        stage('Check AWS Region') {
+            steps {
+                script {
+                    echo "AWS Region is: ${env.AWS_REGION}"
+                    echo "AWS Region is: ${env.AWS_CODEARTIFACT_DOMAIN}"
+                    echo "AWS Region is: ${env.AWS_ACCOUNT_ID}"
+                    echo "AWS Region is: ${env.AWS_CODEARTIFACT_REPO}"
+                }
+            }
+        }
+
+
         stage('Publish Backend to AWS CodeArtifact') {
             steps {
                 sh 'chmod +x publish_to_codeartifact.sh'
