@@ -30,10 +30,18 @@ resource "aws_security_group" "app_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  # Node Exporter: Allow instances to be monitored.
+  # Node Exporter: Allow instances to be monitored. TODO: Dedicated SG
   ingress {
     from_port   = 9100
     to_port     = 9100
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  # Nginx Exporter: Allow instances to be monitored. TODO: Dedicated SG
+  ingress {
+    from_port   = 9113
+    to_port     = 9113
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }

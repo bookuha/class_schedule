@@ -9,11 +9,11 @@ scrape_configs:
     relabel_configs:
       - source_labels: [__meta_ec2_tag_Role]
         action: keep
-        regex: "node-exporter"  # Keep only instances with the "node-exporter" tag
+        regex: .*node-exporter.*  # Match if "node-exporter" is part of the Role tag
       - source_labels: [__meta_ec2_private_ip]
         action: replace
         target_label: __address__
-        replacement: ${1}:9100  # Use port 9101 for metrics
+        replacement: ${1}:9100
 
   - job_name: 'ec2-cloudwatch-exporter'
     ec2_sd_configs:
@@ -22,8 +22,21 @@ scrape_configs:
     relabel_configs:
       - source_labels: [__meta_ec2_tag_Role]
         action: keep
-        regex: "cloudwatch-exporter"  # Keep only instances with the "cloudwatch-exporter" tag
+        regex: .*cloudwatch-exporter.*
       - source_labels: [__meta_ec2_private_ip]
         action: replace
         target_label: __address__
-        replacement: ${1}:9106  # Use port 9106 for metrics
+        replacement: ${1}:9106
+
+  - job_name: 'ec2-nginx-exporter'
+    ec2_sd_configs:
+      - region: 'eu-north-1'
+      - port: 9113
+    relabel_configs:
+      - source_labels: [__meta_ec2_tag_Role]
+        action: keep
+        regex: .*nginx-exporter.*
+      - source_labels: [__meta_ec2_private_ip]
+        action: replace
+        target_label: __address__
+        replacement: ${1}:9113

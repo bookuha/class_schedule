@@ -52,6 +52,12 @@ variable "node_exporter_role_tag" {
   default     = "node-exporter"
 }
 
+variable "nginx_exporter_role_tag" {
+  type        = string
+  description = "Role tag for instances that have Nginx Exporter set up on them. Required for dynamic discovery of such services by Prometheus."
+  default     = "nginx-exporter"
+}
+
 variable "cloudwatch_exporter_role_tag" {
   type        = string
   description = "Role tag for instances that have CloudWatch Exporter set up on them. Required for dynamic discovery of such services by Prometheus."
