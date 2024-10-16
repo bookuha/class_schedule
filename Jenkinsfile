@@ -99,6 +99,13 @@ pipeline {
                             --private-key ~/.ssh/id_rsa
                         """
 
+                        // Setup Nginx Exporter on Frontend
+                        sh """
+                            ansible-playbook -i ${FRONTEND_IP}, nginx_exporter_playbook.yml \
+                            -u ec2-user \
+                            --private-key ~/.ssh/id_rsa
+                        """
+
                         // Setup CloudWatch Exporter
                         sh """
                             ansible-playbook -i ${CLOUDWATCH_IP}, cloud_watch_exporter_playbook.yml \

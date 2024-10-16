@@ -39,7 +39,7 @@
     remote_src: yes
 
 - name: Move Node Exporter binary
-  ansible.builtin.command: mv /opt/node_exporter-{{ nginx_exporter_version }}.linux-amd64/nginx_exporter /usr/local/bin/
+  ansible.builtin.command: mv /opt/nginx_exporter-{{ nginx_exporter_version }}.linux-amd64/nginx_exporter /usr/local/bin/
   args:
     creates: /usr/local/bin/nginx_exporter
 
