@@ -79,7 +79,7 @@ pipeline {
                         // Setup Backend Web Server
                         sh """
                             ansible-playbook -i ${BACKEND_IP}, backend_playbook.yml \
-                            --extra-vars "db_host=${POSTGRES_IP} db_password=${DB_PASS} redis_host=${REDIS_IP} mongo_first_cluster=${MONGO_IP} mongo_username=${MONGO_USERNAME} mongo_password=${MONGO_PASSWORD} workspace_path=${WORKSPACE}" \
+                            --extra-vars "db_host=${POSTGRES_IP} db_password=${DB_PASS} redis_host=${REDIS_IP} mongo_default_server_cluster=${MONGO_IP} mongo_first_cluster=${MONGO_IP} mongo_username=${MONGO_USERNAME} mongo_password=${MONGO_PASSWORD} workspace_path=${WORKSPACE}" \
                             -u ec2-user \
                             --private-key ~/.ssh/id_rsa
                         """
