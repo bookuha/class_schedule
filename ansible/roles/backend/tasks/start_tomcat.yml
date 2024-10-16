@@ -21,6 +21,7 @@
       Environment=DB_PASSWORD={{ db_password }}
       Environment=DB_NAME={{ db_name }}
       Environment=REDIS_HOST={{ redis_host }}
+      Environment=REDIS_PORT={{ redis_port }}
       Environment=MONGO_CURRENT_DB={{ mongo_current_db }}
       Environment=MONGO_DEFAULT_SERVER_CLUSTER={{ mongo_default_server_cluster }}
       Environment=MONGO_FIRST_CLUSTER={{ mongo_first_cluster }}
