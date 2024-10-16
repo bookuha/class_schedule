@@ -3,43 +3,157 @@ metrics:
   - aws_namespace: AWS/ElastiCache
     aws_dimensions:
       - CacheClusterId
-    aws_metric_name: CacheHits
+    aws_metric_name: Evictions
     aws_statistics:
-      - Average
       - Sum
   - aws_namespace: AWS/ElastiCache
     aws_dimensions:
       - CacheClusterId
-    aws_metric_name: CacheMisses
+    aws_metric_name: CurrConnections
     aws_statistics:
       - Average
+  - aws_namespace: AWS/ElastiCache
+    aws_dimensions:
+      - CacheClusterId
+    aws_metric_name: ReplicationLag
+    aws_statistics:
+      - Maximum
+  - aws_namespace: AWS/ElastiCache
+    aws_dimensions:
+      - CacheClusterId
+    aws_metric_name: BytesUsedForCache
+    aws_statistics:
+      - Average
+  - aws_namespace: AWS/ElastiCache
+    aws_dimensions:
+      - CacheClusterId
+    aws_metric_name: CPUUtilization
+    aws_statistics:
+      - Average
+      - Maximum
+  - aws_namespace: AWS/ElastiCache
+    aws_dimensions:
+      - CacheClusterId
+    aws_metric_name: SwapUsage
+    aws_statistics:
+      - Average
+  - aws_namespace: AWS/ElastiCache
+    aws_dimensions:
+      - CacheClusterId
+    aws_metric_name: NetworkBytesIn
+    aws_statistics:
+      - Sum
+  - aws_namespace: AWS/ElastiCache
+    aws_dimensions:
+      - CacheClusterId
+    aws_metric_name: NetworkBytesOut
+    aws_statistics:
       - Sum
   - aws_namespace: AWS/RDS
     aws_dimensions:
       - DBInstanceIdentifier
-    aws_metric_name: CPUUtilization
+    aws_metric_name: DatabaseConnections
     aws_statistics:
       - Average
-      - Maximum
   - aws_namespace: AWS/RDS
     aws_dimensions:
       - DBInstanceIdentifier
-    aws_metric_name: FreeStorageSpace
+    aws_metric_name: ReadIOPS
     aws_statistics:
       - Average
-      - Minimum
+  - aws_namespace: AWS/RDS
+    aws_dimensions:
+      - DBInstanceIdentifier
+    aws_metric_name: WriteIOPS
+    aws_statistics:
+      - Average
+  - aws_namespace: AWS/RDS
+    aws_dimensions:
+      - DBInstanceIdentifier
+    aws_metric_name: ReadLatency
+    aws_statistics:
+      - Average
+  - aws_namespace: AWS/RDS
+    aws_dimensions:
+      - DBInstanceIdentifier
+    aws_metric_name: WriteLatency
+    aws_statistics:
+      - Average
+  - aws_namespace: AWS/RDS
+    aws_dimensions:
+      - DBInstanceIdentifier
+    aws_metric_name: DiskQueueDepth
+    aws_statistics:
+      - Average
+  - aws_namespace: AWS/RDS
+    aws_dimensions:
+      - DBInstanceIdentifier
+    aws_metric_name: FreeableMemory
+    aws_statistics:
+      - Average
+  - aws_namespace: AWS/RDS
+    aws_dimensions:
+      - DBInstanceIdentifier
+    aws_metric_name: NetworkReceiveThroughput
+    aws_statistics:
+      - Sum
+  - aws_namespace: AWS/RDS
+    aws_dimensions:
+      - DBInstanceIdentifier
+    aws_metric_name: NetworkTransmitThroughput
+    aws_statistics:
+      - Sum
   - aws_namespace: AWS/DocDB
     aws_dimensions:
       - DBInstanceIdentifier
-    aws_metric_name: CPUUtilization
+    aws_metric_name: DatabaseConnections
     aws_statistics:
       - Average
-      - Maximum
   - aws_namespace: AWS/DocDB
     aws_dimensions:
       - DBInstanceIdentifier
-    aws_metric_name: FreeStorageSpace
+    aws_metric_name: ReadIOPS
     aws_statistics:
       - Average
-      - Minimum
-
+  - aws_namespace: AWS/DocDB
+    aws_dimensions:
+      - DBInstanceIdentifier
+    aws_metric_name: WriteIOPS
+    aws_statistics:
+      - Average
+  - aws_namespace: AWS/DocDB
+    aws_dimensions:
+      - DBInstanceIdentifier
+    aws_metric_name: ReadLatency
+    aws_statistics:
+      - Average
+  - aws_namespace: AWS/DocDB
+    aws_dimensions:
+      - DBInstanceIdentifier
+    aws_metric_name: WriteLatency
+    aws_statistics:
+      - Average
+  - aws_namespace: AWS/DocDB
+    aws_dimensions:
+      - DBInstanceIdentifier
+    aws_metric_name: DiskQueueDepth
+    aws_statistics:
+      - Average
+  - aws_namespace: AWS/DocDB
+    aws_dimensions:
+      - DBInstanceIdentifier
+    aws_metric_name: FreeableMemory
+    aws_statistics:
+      - Average
+  - aws_namespace: AWS/DocDB
+    aws_dimensions:
+      - DBInstanceIdentifier
+    aws_metric_name: NetworkReceiveThroughput
+    aws_statistics:
+      - Sum
+  - aws_namespace: AWS/DocDB
+    aws_dimensions:
+      - DBInstanceIdentifier
+    aws_metric_name: NetworkTransmitThroughput
+    aws_statistics:
+      - Sum
