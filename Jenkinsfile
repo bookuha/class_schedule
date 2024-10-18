@@ -7,7 +7,7 @@ pipeline {
         AWS_REGION = credentials('aws-region')
         AWS_CODEARTIFACT_REPO = credentials('aws-codeartifact-repo')
     }
-    
+   
     stages {
         stage('Publish Backend to AWS CodeArtifact') {
             steps {
@@ -47,6 +47,7 @@ pipeline {
                         env.PROMETHEUS_IP = sh(script: 'terraform output -raw prometheus_instance_public_ip', returnStdout: true).trim()
                         env.GRAFANA_IP = sh(script: 'terraform output -raw grafana_instance_public_ip', returnStdout: true).trim()
                         env.CLOUDWATCH_IP = sh(script: 'terraform output -raw cloudwatch_instance_public_ip', returnStdout: true).trim()
+
                     }
                 }
             }
