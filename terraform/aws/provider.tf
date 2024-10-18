@@ -5,6 +5,12 @@ terraform {
       version = "5.70"
     }
   }
+  backend "s3" {
+    bucket                  = "terraform-s3-state-bookuha"
+    key                     = "class-schedule"
+    region                  = "eu-north-1"
+    shared_credentials_file = "~/.aws/credentials"
+  }
 }
 
 provider "aws" {
