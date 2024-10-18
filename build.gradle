@@ -19,6 +19,7 @@ plugins {
 }
 
 group 'com.softserve'
+version '1.0.0'
 
 java {
     toolchain {
@@ -237,9 +238,7 @@ dependencies {
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            groupId = 'com.class_schedule'
             artifactId = 'class_schedule_backend'
-            version = '1'
             from components.web
         }
     }
