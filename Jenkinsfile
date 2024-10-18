@@ -136,10 +136,15 @@ pipeline {
 
     post {
         always {
-            echo 'Pipeline finished'
+            echo 'Pipeline finished. Cleaning up...'
+            cleanWs(cleanWhenNotBuilt: false,
+                    deleteDirs: true,
+                    disableDeferredWipeout: true,
+                    notFailBuild: true,
+                    patterns: [[pattern: '.npmrc', type: 'INCLUDE']])
         }
         success {
-            echo 'Pipeline succeeded'
+            echo 'Pipeline succeeded.'
         }
         failure {
             echo 'Pipeline failed'
