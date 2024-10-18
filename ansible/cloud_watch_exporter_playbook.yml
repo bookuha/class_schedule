@@ -1,0 +1,6 @@
+# cloud_watch_exporter_playbook.yml
+
+- hosts: all # (a single instance, usually) Change to your group, if you're using inventory file
+  become: yes
+  roles:
+    - cloud_watch_exporter

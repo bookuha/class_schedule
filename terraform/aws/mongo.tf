@@ -1,9 +1,9 @@
 resource "aws_docdb_cluster" "mongo_cluster" {
+  provider                = aws.docdb_region
   cluster_identifier      = var.mongo_cluster_identifier
   master_username         = var.mongo_master_username
   master_password         = var.mongo_master_password
   skip_final_snapshot     = true
-  engine_version          = "4.0.0" # DocumentDB uses MongoDB 3.6 compatibility
   vpc_security_group_ids  = [aws_security_group.mongo_sg.id]
   
   tags = {
@@ -12,10 +12,10 @@ resource "aws_docdb_cluster" "mongo_cluster" {
 }
 
 resource "aws_docdb_cluster_instance" "mongo_instance" {
+  provider                = aws.docdb_region
   identifier              = var.mongo_instance_identifier
   cluster_identifier      = aws_docdb_cluster.mongo_cluster.id
   instance_class          = var.mongo_instance_class
-  engine_version          = "4.0.0"
   apply_immediately       = true
   
   tags = {
@@ -24,6 +24,7 @@ resource "aws_docdb_cluster_instance" "mongo_instance" {
 }
 
 resource "aws_security_group" "mongo_sg" {
+  provider    = aws.docdb_region
   name        = "mongo-security-group"
   description = "Allow backend to access DocDb"
   tags = {
@@ -32,10 +33,11 @@ resource "aws_security_group" "mongo_sg" {
 }
 
 resource "aws_security_group_rule" "mongo_to_be" {
+  provider                 = aws.docdb_region
   type                     = "ingress"
   from_port                = 27017
   to_port                  = 27017
   protocol                 = "tcp"
   security_group_id        = aws_security_group.mongo_sg.id
-  source_security_group_id = aws_security_group.be_sg.id
+  cidr_blocks              = ["0.0.0.0/0"] # TODO: Cross-Region VPC Peering / Correct CIDR
 }

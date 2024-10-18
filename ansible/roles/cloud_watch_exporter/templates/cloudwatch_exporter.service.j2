@@ -1,0 +1,13 @@
+[Unit]
+Description=CloudWatch Exporter
+After=network.target
+
+[Service]
+User=cloudwatch_exporter
+Group=cloudwatch_exporter
+ExecStart=/usr/bin/java -jar /opt/cloudwatch_exporter.jar 9106 /etc/cloudwatch_exporter.yml
+SuccessExitStatus=143
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

@@ -24,13 +24,6 @@
       Environment=REDIS_PORT={{ redis_port }}
       Environment=MONGO_CURRENT_DB={{ mongo_current_db }}
       Environment=MONGO_DEFAULT_SERVER_CLUSTER={{ mongo_default_server_cluster }}
-      Environment=MONGO_CURRENT_DB={{ mongo_current_db }}
-      Environment=MONGO_DEFAULT_SERVER_CLUSTER={{ mongo_default_server_cluster }}
-      Environment=MONGO_FIRST_CLUSTER={{ mongo_first_cluster }}
-      Environment=MONGO_CLUSTER={{ mongo_cluster }}
-      Environment=MONGO_USERNAME={{ mongo_username }}
-      Environment=MONGO_PASSWORD={{ mongo_password }}
-      Environment=MONGO_MAIN_DB={{ mongo_main_db }}
 
       ExecStart=/opt/tomcat/bin/startup.sh
       ExecStop=/opt/tomcat/bin/shutdown.sh

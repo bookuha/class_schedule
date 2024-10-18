@@ -1,0 +1,71 @@
+---
+- name: Disable existing swap file
+  command: swapoff /swapfile
+  ignore_errors: true # This will ignore errors if the swap file doesn't exist
+
+- name: Remove existing swap file
+  command: rm -f /swapfile
+  ignore_errors: true # Ignore if it doesn't exist
+
+- name: Create a swap file
+  command: dd if=/dev/zero of=/swapfile bs=1M count=1024
+  args:
+    creates: /swapfile # This will prevent the task from running if the file already exists
+
+- name: Set up swap space
+  command: mkswap /swapfile
+  when: ansible_facts['os_family'] == "RedHat" # Make sure this is only run on RedHat-based systems
+
+- name: Enable swap file
+  command: swapon /swapfile
+
+- name: Make swap file permanent
+  lineinfile:
+    path: /etc/fstab
+    line: "/swapfile swap swap defaults 0 0"
+    state: present
+
+- name: Add Grafana GPG key
+  get_url:
+    url: https://rpm.grafana.com/gpg.key
+    dest: /etc/pki/rpm-gpg/RPM-GPG-KEY-grafana
+
+- name: Add Grafana repository
+  copy:
+    dest: /etc/yum.repos.d/grafana.repo
+    content: |
+      [grafana]
+      name=grafana
+      baseurl=https://rpm.grafana.com
+      repo_gpgcheck=1
+      enabled=1
+      gpgcheck=1
+      gpgkey=https://rpm.grafana.com/gpg.key
+      sslverify=1
+      sslcacert=/etc/pki/tls/certs/ca-bundle.crt
+
+- name: Install Grafana
+  yum:
+    name: grafana
+    state: present
+
+- name: Start Grafana service
+  systemd:
+    name: grafana-server
+    state: started
+    enabled: yes # Ensure it starts on boot
+
+- name: Wait for Grafana to start
+  wait_for:
+    port: 3000
+    timeout: 30
+
+- name: Create Prometheus datasource
+  community.grafana.grafana_datasource:
+    name: "datasource-prometheus"
+    grafana_url: "http://localhost:3000"
+    grafana_user: "{{ grafana_admin_username }}"
+    grafana_password: "{{ grafana_admin_password }}"
+    org_id: "1"
+    ds_type: "prometheus"
+    ds_url: "http://{{ prometheus_ip }}:9090"
