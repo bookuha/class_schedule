@@ -1,0 +1,60 @@
+---
+# tasks/setup_nginx_exporter.yml
+
+- name: Ensure wget and tar are installed
+  ansible.builtin.yum:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - wget
+    - tar
+
+- name: Create a user for Nginx Exporter
+  ansible.builtin.user:
+    name: nginx_exporter
+    system: yes
+    shell: /sbin/nologin
+
+- name: Create directories for Nginx Exporter
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: nginx_exporter
+    group: nginx_exporter
+    mode: 0755
+  loop:
+    - /etc/nginx_exporter
+    - /var/lib/nginx_exporter
+
+- name: Download Nginx Exporter tarball
+  ansible.builtin.get_url:
+    url: https://github.com/nginxinc/nginx-prometheus-exporter/releases/download/v{{ nginx_exporter_version }}/nginx-prometheus-exporter_{{ nginx_exporter_version}}_linux_amd64.tar.gz
+    dest: /tmp/nginx_exporter.tar.gz
+    mode: "0644"
+
+- name: Extract Nginx Exporter
+  ansible.builtin.unarchive:
+    src: /tmp/nginx_exporter.tar.gz
+    dest: /opt/
+    remote_src: yes
+
+- name: Move Node Exporter binary
+  ansible.builtin.command: mv /opt/nginx-prometheus-exporter /usr/local/bin/
+  args:
+    creates: /usr/local/bin/nginx_exporter
+
+- name: Set up Nginx Exporter systemd service
+  ansible.builtin.template:
+    src: nginx_exporter.service.j2
+    dest: /etc/systemd/system/nginx_exporter.service
+    mode: "0644"
+
+- name: Reload systemd daemon
+  ansible.builtin.systemd:
+    daemon_reload: yes
+
+- name: Enable and start Nginx Exporter service
+  ansible.builtin.systemd:
+    name: nginx_exporter
+    enabled: yes
+    state: started

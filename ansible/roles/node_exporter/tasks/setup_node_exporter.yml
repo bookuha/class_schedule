@@ -1,0 +1,60 @@
+---
+# tasks/setup_node_exporter.yml
+
+- name: Ensure wget and tar are installed
+  ansible.builtin.yum:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - wget
+    - tar
+
+- name: Create a user for Node Exporter
+  ansible.builtin.user:
+    name: node_exporter
+    system: yes
+    shell: /sbin/nologin
+
+- name: Create directories for Node Exporter
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: node_exporter
+    group: node_exporter
+    mode: 0755
+  loop:
+    - /etc/node_exporter
+    - /var/lib/node_exporter
+
+- name: Download Node Exporter tarball
+  ansible.builtin.get_url:
+    url: https://github.com/prometheus/node_exporter/releases/download/v{{ node_exporter_version }}/node_exporter-{{ node_exporter_version }}.linux-amd64.tar.gz
+    dest: /tmp/node_exporter.tar.gz
+    mode: "0644"
+
+- name: Extract Node Exporter
+  ansible.builtin.unarchive:
+    src: /tmp/node_exporter.tar.gz
+    dest: /opt/
+    remote_src: yes
+
+- name: Move Node Exporter binary
+  ansible.builtin.command: mv /opt/node_exporter-{{ node_exporter_version }}.linux-amd64/node_exporter /usr/local/bin/
+  args:
+    creates: /usr/local/bin/node_exporter
+
+- name: Set up Node Exporter systemd service
+  ansible.builtin.template:
+    src: node_exporter.service.j2
+    dest: /etc/systemd/system/node_exporter.service
+    mode: "0644"
+
+- name: Reload systemd daemon
+  ansible.builtin.systemd:
+    daemon_reload: yes
+
+- name: Enable and start Node Exporter service
+  ansible.builtin.systemd:
+    name: node_exporter
+    enabled: yes
+    state: started
